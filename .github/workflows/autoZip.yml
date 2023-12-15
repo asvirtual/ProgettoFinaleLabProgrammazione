@@ -25,17 +25,3 @@ jobs:
         with:
           # Filename for archive
           filename: ProgettoFinale.zip
-          # Base path for archive files
-          path: .
-          # Working directory before zipping
-          directory: .
-          # List of excluded files / directories
-          exclusions: ""
-          # List of excluded files / directories with recursive wildcards (only applies on Windows with `zip` type)
-          recursive_exclusions: ""
-          # Provide any custom parameters to the zipping command
-          custom: ""
-          # Tool to use for archiving
-          type: zip
-          # An extra command that will run before zipping
-          command: ""
