@@ -21,7 +21,9 @@ jobs:
       uses: thedoctor0/zip-release@main
       with:
         filename: code.zip  # Change this to your preferred zip file name
-        exclusions: .github, .gitignore
+        exclusions: |
+          .github
+          .gitignore
 
     - name: Create Release
       id: create_release
