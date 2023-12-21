@@ -4,10 +4,18 @@
 #include "CornerTile.h"
 #include "TileTerrain.h"
 
+char nthLetter(int idx)
+{
+    if (idx < 0 || idx > 20) return ' ';
+    return "ABCDEFGHILMNOPQRSTUVZ"[idx];
+}
+
 Board::Board(void) {
+    for (int i = 0; i < Board::PLAYERS_COUNT; i++) this->players.push_back(std::make_shared<Player>());
     for (int i = 0; i < 28; i++) {
-        if (i % 7 == 0) this->tiles.push_back(std::unique_ptr<Tile>(new CornerTile(i)));
-        else this->tiles.push_back(std::unique_ptr<Tile>(new TileTerrain(TileType::ECONOMY, i)));
+        if (i == 0) this->tiles.push_back(std::make_unique<CornerTile>(TileType::START, i));
+        else if (i % 7 == 0) this->tiles.push_back(std::make_unique<CornerTile>(i));
+        else this->tiles.push_back(std::make_unique<TileTerrain>(TileType::ECONOMY, i));
     }
 }
 
@@ -23,9 +31,15 @@ void Board::print(void) {
         22                   13
         21 20 19 18 17 16 15 14
     */
+    std::cout << "    ";
+    for (int i = 0; i < Board::SIDE_LENGTH; i++)
+        std::cout << "   " << i;
+
+    std::cout << "\n";
 
     for (int row = 0; row < Board::SIDE_LENGTH; row++) {
         for (int col = 0; col < Board::SIDE_LENGTH; col++) {
+            if (col == 0) std::cout << " " << nthLetter(row) << "    ";
             int idx = (row + col >= 2 * row) ? row + col : (Board::SIDE_LENGTH * 4 - 4) - (row + col);
             if (row == 0 || row == Board::SIDE_LENGTH - 1 || col == 0 || col == Board::SIDE_LENGTH - 1) 
                 std::cout << "|" << (char) this->tiles[idx]->type << "| ";
@@ -34,5 +48,13 @@ void Board::print(void) {
         }
         std::cout << "\n";
     }
+}
 
+bool Board::buyTerrain(int position, std::shared_ptr<Player> player) {
+    if (this->tiles[position].get()->getType() == TileType::CORNER || this->tiles[position].get()->getType() == TileType::START) return false;
+    SideTile* tile = (SideTile*) this->tiles[position].get();
+    
+    if (player->getBalance() < tile->getPrice()) return false;
+    tile->owner = player;
+    return true;
 }

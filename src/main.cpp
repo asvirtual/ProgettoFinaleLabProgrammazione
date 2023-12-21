@@ -8,5 +8,6 @@
 int main(void) {
     Board b = Board();
     b.print();
+    
     return 0;
 }

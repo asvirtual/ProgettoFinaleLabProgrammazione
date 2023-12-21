@@ -9,13 +9,16 @@
 class Board {
     private:
         static constexpr int SIDE_LENGTH = 8;
+        static constexpr int PLAYERS_COUNT = 4;
+
         std::vector<std::unique_ptr<Tile>> tiles;
-        std::vector<std::unique_ptr<Player>> players;
+        std::vector<std::shared_ptr<Player>> players;
 
     public:
         Board(void);
-        // Board(std::vector<std::unique_ptr<Tile>> t, std::vector<std::unique_ptr<Player>> p) : tiles(t), players(p) {};
         void print(void);
+        bool buyTerrain(int position, std::shared_ptr<Player> player);
+        void payRent(int position, std::shared_ptr<Player> player);
 };
 
 #endif
