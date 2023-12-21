@@ -13,6 +13,10 @@ class Tile {
         Tile(TileType t, int p) : type(t), position(p) {};
         TileType getType(void) const { return this->type; };
         friend class Board;
+
+        static constexpr int ECONOMY_COUNT = 8;
+        static constexpr int STANDARD_COUNT = 10;
+        static constexpr int LUXURY_COUNT = 6;
 };
 
 #endif

@@ -13,13 +13,36 @@ char nthLetter(int idx)
 Board::Board(void) {
     for (int i = 0; i < Board::PLAYERS_COUNT; i++) this->players.push_back(std::make_shared<Player>());
 
-    int startPosition = ((rand() % 28) % 7) * 7; // 0, 7, 14 or 21
-    this->tiles.push_back(std::make_shared<CornerTile>(TileType::START, startPosition));
-
+    int economyCounter = 0, standardCounter = 0, luxuryCounter = 0;
     for (int i = 0; i < 28; i++) {
-        if (i != startPosition && i % 7 == 0) this->tiles.push_back(std::make_shared<CornerTile>(i));
-        else this->tiles.push_back(std::make_shared<TileTerrain>(TileType::ECONOMY, i));
+        if (i % 7 == 0) this->tiles.push_back(std::make_shared<CornerTile>(i));
+        else {
+            TileType tileType;
+            switch (rand() % 3) {
+                case 1:
+                    if (luxuryCounter < Tile::LUXURY_COUNT) {
+                        luxuryCounter++;
+                        tileType = TileType::LUXURY;
+                        break;
+                    }
+                case 2:
+                    if (economyCounter < Tile::ECONOMY_COUNT) {
+                        economyCounter++;
+                        tileType = TileType::ECONOMY;
+                        break;
+                    }
+                default:
+                    standardCounter++;
+                    tileType = TileType::STANDARD;
+                    break;
+            }
+
+            this->tiles.push_back(std::make_shared<TileTerrain>(tileType, i));
+        }
     }
+    
+    int startPosition = (rand() % 4) * 7; // 0, 7, 14 or 21
+    this->tiles[startPosition] = std::make_shared<CornerTile>(TileType::START, startPosition);
 }
 
 void Board::print(void) {
@@ -43,10 +66,10 @@ void Board::print(void) {
     for (int row = 0; row < Board::SIDE_LENGTH; row++) {
         for (int col = 0; col < Board::SIDE_LENGTH; col++) {
             if (col == 0) std::cout << " " << nthLetter(row) << "    ";
-            int idx = (row + col >= 2 * row) ? row + col : (Board::SIDE_LENGTH * 4 - 4) - (row + col);
-            if (row == 0 || row == Board::SIDE_LENGTH - 1 || col == 0 || col == Board::SIDE_LENGTH - 1) 
+            if (row == 0 || row == Board::SIDE_LENGTH - 1 || col == 0 || col == Board::SIDE_LENGTH - 1) {
+                int idx = (row + col >= 2 * row) ? row + col : (Board::SIDE_LENGTH * 4 - 4) - (row + col);
                 std::cout << "|" << (char) this->tiles[idx]->type << "| ";
-            else 
+            } else
                 std::cout << "    ";
         }
         std::cout << "\n";
