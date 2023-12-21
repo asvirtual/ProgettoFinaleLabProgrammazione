@@ -81,6 +81,8 @@ bool Board::buyTerrain(int position, std::shared_ptr<Player> player) {
     SideTile* tile = (SideTile*) this->tiles[position].get();
     
     if (player->getBalance() < tile->getPrice()) return false;
+    player->withdraw(tile->getPrice());
     tile->owner = player;
+    
     return true;
 }
