@@ -8,7 +8,7 @@
 
 class Board {
     private:
-        static constexpr int SIDE_LENGTH = 7;
+        static constexpr int SIDE_LENGTH = 8;
         std::vector<std::unique_ptr<Tile>> tiles;
         std::vector<std::unique_ptr<Player>> players;
 
