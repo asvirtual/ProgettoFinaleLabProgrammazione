@@ -6,4 +6,12 @@ set(EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_SOURCE_DIR})
 
 add_executable(main 
 	src/main.cpp
+	src/Board.cpp
+	src/BotPlayer.cpp
+	src/CornerTile.cpp
+	src/Player.cpp
+	src/Tile.cpp
+	src/TileHotel.cpp
+	src/TileHouse.cpp
+	src/TileTerrain.cpp
 )
