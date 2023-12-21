@@ -7,15 +7,12 @@ class Tile {
     protected:
         TileType type;
         int position;
+        Tile(void) {};
 
     public:
-        Tile(void) {};
-        virtual ~Tile() = 0;
-        Tile(const Tile&) = delete;
-        Tile& operator=(const Tile&) = delete;
-
         Tile(TileType t, int p) : type(t), position(p) {};
         TileType getType(void) const { return this->type; };
+        friend class Board;
 };
 
 #endif

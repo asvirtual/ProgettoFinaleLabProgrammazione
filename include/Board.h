@@ -10,12 +10,11 @@ class Board {
     private:
         static constexpr int SIDE_LENGTH = 7;
         std::vector<std::unique_ptr<Tile>> tiles;
-        // std::vector<std::unique_ptr<Player>> players;
+        std::vector<std::unique_ptr<Player>> players;
 
     public:
-        Board(void) {};
+        Board(void);
         // Board(std::vector<std::unique_ptr<Tile>> t, std::vector<std::unique_ptr<Player>> p) : tiles(t), players(p) {};
-        Board(std::vector<std::unique_ptr<Tile>> t) : tiles(t) {};
         void print(void);
 };
 
