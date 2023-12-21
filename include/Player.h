@@ -17,8 +17,7 @@ class Player {
     public:
         Player(void) {};
         Player(int amount, int pos, char idnum);
-        Player(const Player& other);
-
+        
         void print(void) {};
         int getBalance(void) const { return this->balance; };
         char getId(void) const { return this->id; };
@@ -26,7 +25,6 @@ class Player {
         void withdraw(int amount);
         int throwDice(void);
 
-        Player& operator=(const Player& other);
 };
 
 #endif
