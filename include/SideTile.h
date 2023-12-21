@@ -12,6 +12,7 @@ class SideTile : public Tile {
 
     public:
         SideTile(void) {};
+        virtual ~SideTile() {};
         SideTile(TileType t, int p) : Tile(t, p) {};
         virtual int getPrice(void) = 0;
         virtual int getRent(void) = 0;

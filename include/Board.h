@@ -3,6 +3,8 @@
 
 #include <vector>
 #include <memory>
+#include <random>
+
 #include "Tile.h"
 #include "Player.h"
 
@@ -11,7 +13,7 @@ class Board {
         static constexpr int SIDE_LENGTH = 8;
         static constexpr int PLAYERS_COUNT = 4;
 
-        std::vector<std::unique_ptr<Tile>> tiles;
+        std::vector<std::shared_ptr<Tile>> tiles;
         std::vector<std::shared_ptr<Player>> players;
 
     public:

@@ -12,10 +12,13 @@ char nthLetter(int idx)
 
 Board::Board(void) {
     for (int i = 0; i < Board::PLAYERS_COUNT; i++) this->players.push_back(std::make_shared<Player>());
+
+    int startPosition = ((rand() % 28) % 7) * 7; // 0, 7, 14 or 21
+    this->tiles.push_back(std::make_shared<CornerTile>(TileType::START, startPosition));
+
     for (int i = 0; i < 28; i++) {
-        if (i == 0) this->tiles.push_back(std::make_unique<CornerTile>(TileType::START, i));
-        else if (i % 7 == 0) this->tiles.push_back(std::make_unique<CornerTile>(i));
-        else this->tiles.push_back(std::make_unique<TileTerrain>(TileType::ECONOMY, i));
+        if (i != startPosition && i % 7 == 0) this->tiles.push_back(std::make_shared<CornerTile>(i));
+        else this->tiles.push_back(std::make_shared<TileTerrain>(TileType::ECONOMY, i));
     }
 }
 

@@ -6,6 +6,8 @@
 #include <vector>
 
 int main(void) {
+    srand(time(NULL));
+
     Board b = Board();
     b.print();
     
