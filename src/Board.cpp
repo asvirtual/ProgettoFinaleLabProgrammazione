@@ -80,7 +80,7 @@ void Board::buyTerrain(SideTile* tile, std::shared_ptr<Player> player) {
     tile->owner = player;
 }
 
-/* TODO */
+/* TO */
 void Board::buildHouse(TileTerrain* tile) {
     
 }
@@ -131,7 +131,7 @@ void Board::move(std::shared_ptr<Player> player) {
     if (tile->owner == nullptr && player->balance > tile->getPrice()) {
         if (player->type == PlayerType::BOT) {
             BotPlayer* bot = (BotPlayer*) player.get();
-            if (bot->buyTile(tile)) this->buyTerrain(tile, player);
+            if (bot->wantsToBuy(tile)) this->buyTerrain(tile, player);
             return;
         }
 
