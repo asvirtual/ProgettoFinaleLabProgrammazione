@@ -38,6 +38,7 @@ void gameLoop(Board board) {
         for (std::shared_ptr<Player> player: board.getPlayers()) {
             board.move(player);
             log("Player " + std::to_string(player->getId()) + " has ended his turn" + "!\n");
+            board.print();
         }
     }
 

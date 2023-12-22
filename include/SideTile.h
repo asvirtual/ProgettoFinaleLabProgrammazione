@@ -1,6 +1,7 @@
 #ifndef SIDE_TILE_H
 #define SIDE_TILE_H
 
+#include <string>
 #include <memory>
 
 #include "Tile.h"
@@ -22,6 +23,7 @@ class SideTile : public Tile {
         int getHotelPrice(void);
         int getTerrainPrice(void);
         int getRent(void);
+        std::string toString(std::vector<std::shared_ptr<Player>>& players) const;
         friend class Board;
 };
 

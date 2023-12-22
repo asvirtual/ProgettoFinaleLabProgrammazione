@@ -36,7 +36,9 @@ Board::Board(void) {
     
     int startPosition = (rand() % 4) * 7; // 0, 7, 14 or 21
     this->tiles[startPosition] = std::make_shared<CornerTile>(TileType::START, startPosition);
-    for (int i = 0; i < Board::PLAYERS_COUNT; i++) this->players.push_back(std::make_shared<BotPlayer>(0, startPosition));
+    // for (int i = 0; i < Board::PLAYERS_COUNT; i++) this->players.push_back(std::make_shared<BotPlayer>(0, startPosition));
+    this->players.push_back(std::make_shared<BotPlayer>(0, startPosition));
+    this->players.push_back(std::make_shared<Player>(1, startPosition, PlayerType::HUMAN));
 }
 
 void Board::print(void) {
@@ -62,7 +64,7 @@ void Board::print(void) {
             if (col == 0) std::cout << " " << nthLetter(row) << "    ";
             if (row == 0 || row == Board::SIDE_LENGTH - 1 || col == 0 || col == Board::SIDE_LENGTH - 1) {
                 int idx = (row + col >= 2 * row) ? row + col : (Board::SIDE_LENGTH * 4 - 4) - (row + col);
-                std::cout << "|" << (char) this->tiles[idx]->type << "| ";
+                std::cout << "|" << this->tiles[idx]->toString(this->players) << "| ";
             } else
                 std::cout << "    ";
         }
@@ -74,6 +76,7 @@ void Board::buyTerrain(SideTile* tile, std::shared_ptr<Player> player) {
     if (player->balance < tile->getTerrainPrice()) return;
     player->withdraw(tile->getTerrainPrice());
     tile->owner = player;
+    player->ownedTiles.push_back(std::make_shared<SideTile>(tile->type, tile->position));
     log("Player " + std::to_string(player->id) + " has bought tile " + std::to_string(tile->position) + "!\n");
 }
 
@@ -95,8 +98,11 @@ void Board::payRent(SideTile* tile, std::shared_ptr<Player> player) {
     if (player->balance < tile->getRent()) {
         std::cout << "Player " << player->id << " is bankrupt!\n";
         tile->owner->deposit(player->balance);
-        for (std::shared_ptr<SideTile> tile : player->ownedTiles) 
-            this->tiles[tile->position] = std::make_shared<SideTile>(tile->type, tile->position);
+        for (std::shared_ptr<SideTile> tile : player->ownedTiles) {
+            tile->owner = nullptr;
+            tile->building = TileBuilding::NONE;
+            // this->tiles[tile->position] = std::make_shared<SideTile>(tile->type, tile->position);
+        }
 
         this->players.erase(
             std::find_if(

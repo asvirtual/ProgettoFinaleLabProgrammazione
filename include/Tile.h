@@ -1,7 +1,12 @@
 #ifndef TILE_H
 #define TILE_H
 
+#include <vector>
+#include <string>
+#include <memory>
+
 #include "TileType.h"
+#include "Player.h"
 
 class Tile {
     protected:
@@ -12,6 +17,7 @@ class Tile {
 
     public:
         TileType getType(void) const { return this->type; };
+        virtual std::string toString(std::vector<std::shared_ptr<Player>>& players) const = 0;
         friend class Board;
 
         static constexpr int ECONOMY_COUNT = 8;

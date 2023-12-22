@@ -56,3 +56,20 @@ int SideTile::getRent(void) {
 
     return 0;
 }
+
+std::string SideTile::toString(std::vector<std::shared_ptr<Player>>& players) const { 
+    std::string toReturn;
+    toReturn += (char) this->type;
+
+    if (this->building == TileBuilding::HOUSE) toReturn += "*";
+    else if (this->building == TileBuilding::HOTEL) toReturn += "^";
+    
+    for (std::shared_ptr<Player> p : players) {
+        if (p->getPosition() == this->position) {
+            toReturn += std::to_string(p->getId());
+            break;
+        }
+    }
+
+    return toReturn;
+};

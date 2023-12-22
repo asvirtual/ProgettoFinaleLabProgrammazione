@@ -36,6 +36,7 @@ class Player {
         void print(void) {};
         int getBalance(void) const { return this->balance; };
         int getId(void) const { return this->id; };
+        int getPosition(void) const { return this->position; };
         void deposit(int amount);
         void withdraw(int amount);
         void transfer(int amount, std::shared_ptr<Player> player);
