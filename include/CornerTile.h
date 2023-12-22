@@ -12,7 +12,7 @@ class CornerTile : public Tile {
         CornerTile(int p) : Tile(TileType::CORNER, p) {};
         CornerTile(TileType t, int p) : Tile(t, p) {};
         bool isStart(void) const { return this->type == TileType::START; };
-        std::string toString(std::vector<std::shared_ptr<Player>>& players) const;
+        std::string toString(const std::vector<std::shared_ptr<Player>>& players) const;
 };
 
 #endif

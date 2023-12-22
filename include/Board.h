@@ -11,17 +11,17 @@
 #include "SideTile.h"
 #include "Player.h"
 #include "BotPlayer.h"
-#include "helperFunctions.h"
+#include "monopoly.h"
 
 class Board {
     private:
         static constexpr int SIDE_LENGTH = 8;
+        static constexpr int TILES_COUNT = 28;
         static constexpr int PLAYERS_COUNT = 4;
         static constexpr int MAX_TURNS = 100;
 
         std::vector<std::shared_ptr<Tile>> tiles;
         std::vector<std::shared_ptr<Player>> players;
-        int turnsCounter;
 
     public:
         Board(void);

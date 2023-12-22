@@ -5,7 +5,7 @@
 #include "Player.h"
 #include "CornerTile.h"
 
-std::string CornerTile::toString(std::vector<std::shared_ptr<Player>>& players) const { 
+std::string CornerTile::toString(const std::vector<std::shared_ptr<Player>>& players) const { 
     std::string toReturn;
     toReturn += (char) this->type;
     

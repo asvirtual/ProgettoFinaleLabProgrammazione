@@ -1,3 +1,5 @@
+#include <algorithm>
+
 #include "SideTile.h"
 
 int SideTile::getHotelPrice() {
@@ -8,9 +10,9 @@ int SideTile::getHotelPrice() {
             return 5;
         case TileType::LUXURY:
             return 10;
+        default:
+            return 0;
     }
-
-    return -1;
 }
 
 int SideTile::getHousePrice() {
@@ -21,9 +23,9 @@ int SideTile::getHousePrice() {
             return 5;
         case TileType::LUXURY:
             return 10;
+        default:
+            return 0;
     }
-
-    return -1;
 }
 
 int SideTile::getTerrainPrice(void) {
@@ -31,7 +33,7 @@ int SideTile::getTerrainPrice(void) {
         case TileType::ECONOMY: return 6;
         case TileType::STANDARD: return 10;
         case TileType::LUXURY: return 20;
-        default: return -1;
+        default: return 0;
     }
 }
 
@@ -47,17 +49,18 @@ int SideTile::getRent(void) {
 
         case TileBuilding::HOTEL:
             switch(this->type) {
-            case TileType::ECONOMY: return 4;
-            case TileType::STANDARD: return 8;
-            case TileType::LUXURY: return 14;
-            default: return 0;
-        }
-    }
+                case TileType::ECONOMY: return 4;
+                case TileType::STANDARD: return 8;
+                case TileType::LUXURY: return 14;
+                default: return 0;
+            }
 
-    return 0;
+        default:
+            return 0;
+    }
 }
 
-std::string SideTile::toString(std::vector<std::shared_ptr<Player>>& players) const { 
+std::string SideTile::toString(const std::vector<std::shared_ptr<Player>>& players) const { 
     std::string toReturn;
     toReturn += (char) this->type;
 
@@ -65,12 +68,9 @@ std::string SideTile::toString(std::vector<std::shared_ptr<Player>>& players) co
     else if (this->building == TileBuilding::HOTEL) toReturn += "^";
     else toReturn += " ";
     
-    for (const std::shared_ptr<Player>& p : players) {
-        if (p->getPosition() == this->position) {
+    for (const std::shared_ptr<Player>& p : players) 
+        if (p->getPosition() == this->position)
             toReturn += std::to_string(p->getId());
-            break;
-        }
-    }
 
     if (toReturn.length() == 2) toReturn += " ";
     return toReturn;

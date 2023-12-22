@@ -1,5 +1,5 @@
 #include "Board.h"
-#include "helperFunctions.h"
+#include "monopoly.h"
 
 #include <memory>
 #include <vector>
