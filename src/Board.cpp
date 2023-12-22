@@ -1,11 +1,12 @@
 #include <algorithm>
 #include <iostream>
+#include <string>
 
 #include "Board.h"
 #include "BotPlayer.h"
 #include "helperFunctions.h"
 
-Board::Board(void) {
+Board::Board(const char* arg) {
     int economyCounter = 0, standardCounter = 0, luxuryCounter = 0;
     for (int i = 0; i < 28; i++) {
         if (i % 7 == 0) this->tiles.push_back(std::make_shared<CornerTile>(i));
@@ -36,9 +37,15 @@ Board::Board(void) {
     
     int startPosition = (rand() % 4) * 7; // 0, 7, 14 or 21
     this->tiles[startPosition] = std::make_shared<CornerTile>(TileType::START, startPosition);
-    for (int i = 0; i < Board::PLAYERS_COUNT; i++) this->players.push_back(std::make_shared<BotPlayer>(startPosition));
-    // this->players.push_back(std::make_shared<BotPlayer>(0, startPosition));
-    // this->players.push_back(std::make_shared<Player>(1, startPosition, PlayerType::HUMAN));
+
+    std::string argumentAsString(arg);
+    if (argumentAsString == "computer"){
+        for (int i = 0; i < Board::PLAYERS_COUNT; i++) this->players.push_back(std::make_shared<BotPlayer>(startPosition));
+    }
+    else if (argumentAsString == "human"){
+        this->players.push_back(std::make_shared<Player>(startPosition, PlayerType::HUMAN));
+        for (int i = 0; i < Board::PLAYERS_COUNT-1; i++) this->players.push_back(std::make_shared<BotPlayer>(startPosition));
+    }
 }
 
 void Board::print(void) {

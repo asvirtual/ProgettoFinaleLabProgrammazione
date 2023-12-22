@@ -22,9 +22,10 @@ class Board {
         std::vector<std::shared_ptr<Tile>> tiles;
         std::vector<std::shared_ptr<Player>> players;
         int turnsCounter;
+        const char* commArg;
 
     public:
-        Board(void);
+        Board(const char* arg);
         const std::vector<std::shared_ptr<Player>>& getPlayers(void) const { return this->players; };
         void print(void);
         void buyTerrain(SideTile* tile, const std::shared_ptr<Player>& player);
