@@ -2,9 +2,11 @@
 #define PLAYER_H
 
 #include <vector>
+#include <string>
 #include <random>
 #include <ctime>
 #include <memory>
+#include <iostream>
 
 // #include "Tile.h"
 // #include "SideTile.h"
@@ -28,8 +30,8 @@ class Player {
         std::vector<std::shared_ptr<SideTile>> ownedTiles;
 
     public:
-        Player(void) : balance(100), id(playersCounter), position(0), type(PlayerType::BOT) { playersCounter++; };
-        Player(int b, int p, PlayerType t) : balance(100), id(playersCounter), position(p), type(t) { playersCounter++; };
+        Player(void) : balance(100), id(playersCounter++), position(0), type(PlayerType::BOT) {};
+        Player(int b, int p, PlayerType t) : balance(100), id(playersCounter++), position(p), type(t) {};
         
         void print(void) {};
         int getBalance(void) const { return this->balance; };
@@ -39,7 +41,10 @@ class Player {
         void transfer(int amount, std::shared_ptr<Player> player);
         int throwDice(void);
         bool operator==(const Player& p) const { return this->id == p.id; };
+        std::string toString(void) const { return "Player " + std::to_string(this->id) + " with balance: " + std::to_string(this->balance) + "\n"; };
         friend class Board;
 };
+
+std::ostream& operator<<(std::ostream& os, const Player& p);
 
 #endif

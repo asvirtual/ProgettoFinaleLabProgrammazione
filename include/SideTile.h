@@ -5,23 +5,23 @@
 
 #include "Tile.h"
 #include "Player.h"
+#include "TileBuilding.h"
 
 class Player;
 
 class SideTile : public Tile {
-    protected:
+    private:
         std::shared_ptr<Player> owner;
-        int housePrice;
-        int hotelPrice;
-        SideTile(void) {};
-        SideTile(TileType t, int p);
+        TileBuilding building;
 
     public:
-        virtual ~SideTile() {};
-        int getHousePrice(void) const { return this->housePrice; };
-        int getHotelPrice(void) const { return this->hotelPrice; };
-        virtual int getPrice(void) = 0;
-        virtual int getRent(void) = 0;
+        SideTile(void) {};
+        SideTile(TileType t, int p) : Tile(t, p), building(TileBuilding::NONE) {};
+        ~SideTile() {};
+        int getHousePrice(void);
+        int getHotelPrice(void);
+        int getTerrainPrice(void);
+        int getRent(void);
         friend class Board;
 };
 

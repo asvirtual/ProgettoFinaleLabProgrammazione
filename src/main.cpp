@@ -1,15 +1,16 @@
 #include "Board.h"
-#include "CornerTile.h"
-#include "TileTerrain.h"
+#include "helperFunctions.h"
 
 #include <memory>
 #include <vector>
 
 int main(void) {
-    srand(time(NULL));
-
+    srand(time(0));
+        
     Board b = Board();
     b.print();
+
+    gameLoop(b);
     
     return 0;
 }

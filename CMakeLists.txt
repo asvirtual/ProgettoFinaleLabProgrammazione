@@ -12,7 +12,5 @@ add_executable(main
 	src/Player.cpp
 	src/Tile.cpp
 	src/SideTile.cpp
-	src/TileTerrain.cpp
-	src/TileHouse.cpp
-	src/TileHotel.cpp
+	src/helperFunctions.cpp
 )

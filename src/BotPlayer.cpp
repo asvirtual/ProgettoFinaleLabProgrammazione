@@ -1,6 +1,5 @@
 #include "BotPlayer.h"
 
-bool BotPlayer::wantsToBuy(SideTile* tile){
-    if (this->balance < tile->getPrice()) return false;
+bool BotPlayer::getDecision() {
     return rand() % 4;
 }
