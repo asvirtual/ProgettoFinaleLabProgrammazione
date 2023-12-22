@@ -31,13 +31,14 @@ void gameLoop(Board board) {
 
     std::swap(board.players[0], board.players[firstPlayerIdx]);
 
-    while (!board.isGameOver()) {
-        board.turnsCounter++;
-        log("New turn!" + std::to_string(board.turnsCounter));
+    int turn = 0;
+    while (!board.isGameOver()){// && turn < Board::MAX_TURNS) {
+        turn++;
+        std::cout << "New turn!" << turn << "\n";
         for (const std::shared_ptr<Player>& player: board.getPlayers()) {
             if (player.get() == nullptr) continue;
             board.move(player);
-            log("Player " + std::to_string(player->getId()) + " has ended his turn" + "!");
+            log("Player " + std::to_string(player->getId()) + " has ended his turn" + "!\n");
             board.print();
         }
     }

@@ -126,14 +126,14 @@ void Board::move(const std::shared_ptr<Player>& player) {
 
     log("Player " + std::to_string(player->id) + " has landed on tile " + std::to_string(newPosition) + "!\n");    
     for(int i = 1; i <= roll; i++){
-        if(this->tiles[player->position+i]->getType() == TileType::START){
+        if(this->tiles[(player->position + i) % 28]->getType() == TileType::START){
             player->deposit(20);
             log("Player " + std::to_string(player->id) + " has passed by the start tile and received 20 fiorini!");
             break;
         }
     }
 
-    if (this->tiles[newPosition]->getType() == TileType::CORNER)
+    if (this->tiles[newPosition]->getType() == TileType::CORNER || this->tiles[newPosition]->getType() == TileType::START)
         return;
 
     SideTile* tile = (SideTile*) this->tiles[newPosition].get();
@@ -177,7 +177,7 @@ void Board::move(const std::shared_ptr<Player>& player) {
 }
 
 bool Board::isGameOver(void) {
-    return this->players.size() == 1 || this->turnsCounter >= Board::MAX_TURNS;
+    return this->players.size() == 1;
 }
 
 void Board::getFinalStandings(void) {
