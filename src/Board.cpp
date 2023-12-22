@@ -132,6 +132,13 @@ void Board::move(std::shared_ptr<Player> player) {
         return;
     }
 
+    for(int i = 0; i < roll; i++){
+        if(this->tiles[i]->getType() == TileType::START){
+            player->deposit(20);
+            break;
+        }
+    }
+
     if (cornerTile->getType() == TileType::CORNER)
         return;
 
