@@ -124,11 +124,13 @@ void Board::move(const std::shared_ptr<Player>& player) {
     int newPosition = (player->position + roll) % 28;
     player->position = newPosition;
 
-    log("Player " + std::to_string(player->id) + " has landed on tile " + std::to_string(newPosition) + "!");
-    if (this->tiles[newPosition]->getType() == TileType::START) {
-        player->deposit(20);
-        log("Player " + std::to_string(player->id) + " has landed on the start tile and received 20 fiorini!");
-        return;
+    log("Player " + std::to_string(player->id) + " has landed on tile " + std::to_string(newPosition) + "!\n");    
+    for(int i = 1; i <= roll; i++){
+        if(this->tiles[player->position+i]->getType() == TileType::START){
+            player->deposit(20);
+            log("Player " + std::to_string(player->id) + " has passed by the start tile and received 20 fiorini!");
+            break;
+        }
     }
 
     if (this->tiles[newPosition]->getType() == TileType::CORNER)
@@ -144,7 +146,8 @@ void Board::move(const std::shared_ptr<Player>& player) {
             return;
         }
 
-        std::string answer = getUserInput("Do you want to buy this tile? (S/N) ");
+        std::string answer = getUserInput("Do you want to buy this tile? (S/N) - show to print board ");
+        if(answer == "show") this->print();
         if (answer == "S" || answer == "s") this->buyTerrain(tile, player);
     } else if (tile->owner != player) {
         this->payRent(tile, player);
@@ -162,8 +165,9 @@ void Board::move(const std::shared_ptr<Player>& player) {
                 return;
             }
 
-            std::string question =  "Do you want to build a" + std::string(tile->building == TileBuilding::NONE ? " house" : " hotel") + "? (S/N) ";
+            std::string question =  "Do you want to build a" + std::string(tile->building == TileBuilding::NONE ? " house" : " hotel") + "? (S/N) - show to print board ";
             std::string answer = getUserInput(question);
+            if(answer == "show") this->print();
             if (answer == "S" || answer == "s") {
                 if (tile->building == TileBuilding::NONE) this->buildHouse(tile);
                 else this->buildHotel(tile);
