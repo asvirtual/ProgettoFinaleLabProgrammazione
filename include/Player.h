@@ -28,8 +28,8 @@ class Player {
         std::vector<std::shared_ptr<SideTile>> ownedTiles;
 
     public:
-        Player(void) : balance(0), position(0), id(PLAYERS_COUNTER++), type(PlayerType::BOT) {};
-        Player(int b, int p, PlayerType t) : balance(b), position(p), id(PLAYERS_COUNTER++), type(t) {};
+        Player(void) : balance(100), position(0), id(PLAYERS_COUNTER++), type(PlayerType::BOT) {};
+        Player(int b, int p, PlayerType t) : balance(100), position(p), id(PLAYERS_COUNTER++), type(t) {};
         
         void print(void) {};
         int getBalance(void) const { return this->balance; };
