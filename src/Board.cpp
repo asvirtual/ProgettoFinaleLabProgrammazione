@@ -96,8 +96,11 @@ void Board::payRent(SideTile* tile, std::shared_ptr<Player> player) {
     if (player->balance < tile->getRent()) {
         std::cout << "Player " << player->id << " is bankrupt!\n";
         tile->owner->deposit(player->balance);
-        for (std::shared_ptr<SideTile> tile : player->ownedTiles)
+        for (std::shared_ptr<SideTile> tile : player->ownedTiles) {
+        // for (int position : player->ownedTiles) {
+            // this->tiles[position] = std::make_shared<TileTerrain>(tile->type, position);
             this->tiles[tile->position] = std::make_shared<TileTerrain>(tile->type, tile->position);
+        }
 
         this->players.erase(
             std::find_if(

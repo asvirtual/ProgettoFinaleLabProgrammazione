@@ -9,15 +9,15 @@
 class Player;
 
 class SideTile : public Tile {
-    private:
+    protected:
         std::shared_ptr<Player> owner;
         int housePrice;
         int hotelPrice;
+        SideTile(void) {};
+        SideTile(TileType t, int p);
 
     public:
-        SideTile(void) {};
         virtual ~SideTile() {};
-        SideTile(TileType t, int p);
         int getHousePrice(void) const { return this->housePrice; };
         int getHotelPrice(void) const { return this->hotelPrice; };
         virtual int getPrice(void) = 0;

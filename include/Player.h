@@ -6,10 +6,10 @@
 #include <ctime>
 #include <memory>
 
-#include "Tile.h"
-#include "SideTile.h"
-#include "TileTerrain.h"
-#include "TileHouse.h"
+// #include "Tile.h"
+// #include "SideTile.h"
+// #include "TileTerrain.h"
+// #include "TileHouse.h"
 
 enum class PlayerType {
     HUMAN,
@@ -20,7 +20,7 @@ class SideTile;
 
 class Player {
     protected:
-        static int PLAYERS_COUNTER;
+        static inline int playersCounter;
         int balance;
         int position;
         int id;
@@ -28,8 +28,8 @@ class Player {
         std::vector<std::shared_ptr<SideTile>> ownedTiles;
 
     public:
-        Player(void) : balance(100), position(0), id(PLAYERS_COUNTER++), type(PlayerType::BOT) {};
-        Player(int b, int p, PlayerType t) : balance(100), position(p), id(PLAYERS_COUNTER++), type(t) {};
+        Player(void) : balance(100), id(playersCounter), position(0), type(PlayerType::BOT) { playersCounter++; };
+        Player(int b, int p, PlayerType t) : balance(100), id(playersCounter), position(p), type(t) { playersCounter++; };
         
         void print(void) {};
         int getBalance(void) const { return this->balance; };

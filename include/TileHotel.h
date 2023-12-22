@@ -1,12 +1,13 @@
 #ifndef TILE_HOTEL_H
 #define TILE_HOTEL_H
 
-#include "TileHouse.h"
+#include "SideTile.h"
 
-class TileHotel : public TileHouse {
+class TileHotel : public SideTile {
     public:
         TileHotel(void) {};
-        TileHotel(TileType t, int p) : TileHouse(t, p) {};
+        ~TileHotel() {};
+        TileHotel(TileType t, int p) : SideTile(t, p) {};
         int getPrice(void) override;
         int getRent(void) override;
 };

@@ -7,6 +7,7 @@ class TileTerrain : public SideTile {
     public:
         TileTerrain(void) {};
         TileTerrain(TileType t, int p) : SideTile(t, p) {};
+        ~TileTerrain() {};
         int getPrice(void) override;
         int getRent(void) override { return 0; };
 };

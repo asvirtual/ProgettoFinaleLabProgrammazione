@@ -8,9 +8,9 @@ class Tile {
         TileType type;
         int position;
         Tile(void) {};
+        Tile(TileType t, int p) : type(t), position(p) {};
 
     public:
-        Tile(TileType t, int p) : type(t), position(p) {};
         TileType getType(void) const { return this->type; };
         friend class Board;
 
