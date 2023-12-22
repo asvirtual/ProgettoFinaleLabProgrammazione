@@ -2,9 +2,6 @@
 #include <iostream>
 
 #include "Board.h"
-#include "CornerTile.h"
-#include "TileTerrain.h"
-#include "BotPlayer.h"
 
 char nthLetter(int idx)
 {
@@ -43,7 +40,7 @@ Board::Board(void) {
     
     int startPosition = (rand() % 4) * 7; // 0, 7, 14 or 21
     this->tiles[startPosition] = std::make_shared<CornerTile>(TileType::START, startPosition);
-    for (int i = 0; i < Board::PLAYERS_COUNT; i++) this->players.push_back(std::make_shared<BotPlayer>(0, startPosition, PlayerType::BOT));
+    for (int i = 0; i < Board::PLAYERS_COUNT; i++) this->players.push_back(std::make_shared<BotPlayer>(0, startPosition));
 }
 
 void Board::print(void) {
@@ -78,7 +75,7 @@ void Board::print(void) {
 }
 
 void Board::buyTerrain(SideTile* tile, std::shared_ptr<Player> player) {    
-    if (!player->canBuy(tile)) return;
+    if (player->balance < tile->getPrice()) return;
     player->withdraw(tile->getPrice());
     tile->owner = player;
 }
@@ -96,7 +93,7 @@ void Board::buildHotel(TileHouse* tile) {
 void Board::payRent(SideTile* tile, std::shared_ptr<Player> player) {    
     if (tile->owner == nullptr || tile->owner == player) return;
 
-    if (!player->canPayRent(tile)) {
+    if (player->balance < tile->getRent()) {
         std::cout << "Player " << player->id << " is bankrupt!\n";
         tile->owner->deposit(player->balance);
         for (std::shared_ptr<SideTile> tile : player->ownedTiles)
@@ -131,7 +128,7 @@ void Board::move(std::shared_ptr<Player> player) {
     SideTile* tile = (SideTile*) this->tiles[newPosition].get();
     std::cout << "Player " << player->id << " has landed on a " << (char) tile->type << " tile!\n";
 
-    if (tile->owner == nullptr && player->canBuy(tile)) {
+    if (tile->owner == nullptr && player->balance > tile->getPrice()) {
         if (player->type == PlayerType::BOT) {
             BotPlayer* bot = (BotPlayer*) player.get();
             if (bot->buyTile(tile)) this->buyTerrain(tile, player);

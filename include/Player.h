@@ -11,6 +11,13 @@
 #include "TileTerrain.h"
 #include "TileHouse.h"
 
+enum class PlayerType {
+    HUMAN,
+    BOT
+};
+
+class SideTile;
+
 class Player {
     protected:
         static int PLAYERS_COUNTER;
@@ -31,17 +38,8 @@ class Player {
         void withdraw(int amount);
         void transfer(int amount, std::shared_ptr<Player> player);
         int throwDice(void);
-        bool canBuy(SideTile* tile) const { return this->balance >= tile->getPrice(); };
-        bool canPayRent(SideTile* tile) const { return this->balance >= tile->getRent(); };
-        bool canBuildHouse(TileTerrain* tile) const { return this->balance >= tile->getHousePrice(); };
-        bool canBuildHotel(TileHouse* tile) const { return this->balance >= tile->getHotelPrice(); };
         bool operator==(const Player& p) const { return this->id == p.id; };
         friend class Board;
-};
-
-enum class PlayerType {
-    HUMAN,
-    BOT
 };
 
 #endif

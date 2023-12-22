@@ -6,6 +6,8 @@
 #include "Tile.h"
 #include "Player.h"
 
+class Player;
+
 class SideTile : public Tile {
     private:
         std::shared_ptr<Player> owner;

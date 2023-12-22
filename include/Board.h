@@ -6,8 +6,11 @@
 #include <random>
 
 #include "Tile.h"
+#include "CornerTile.h"
+#include "TileTerrain.h"
 #include "TileHouse.h"
 #include "Player.h"
+#include "BotPlayer.h"
 
 class Board {
     private:
