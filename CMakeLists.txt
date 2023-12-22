@@ -10,7 +10,6 @@ add_executable(main
 	src/BotPlayer.cpp
 	src/CornerTile.cpp
 	src/Player.cpp
-	src/Tile.cpp
 	src/SideTile.cpp
 	src/monopoly.cpp
 )
