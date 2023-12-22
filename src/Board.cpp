@@ -1,8 +1,10 @@
-#include "Board.h"
+#include <algorithm>
 #include <iostream>
 
+#include "Board.h"
 #include "CornerTile.h"
 #include "TileTerrain.h"
+#include "BotPlayer.h"
 
 char nthLetter(int idx)
 {
@@ -11,8 +13,6 @@ char nthLetter(int idx)
 }
 
 Board::Board(void) {
-    for (int i = 0; i < Board::PLAYERS_COUNT; i++) this->players.push_back(std::make_shared<Player>());
-
     int economyCounter = 0, standardCounter = 0, luxuryCounter = 0;
     for (int i = 0; i < 28; i++) {
         if (i % 7 == 0) this->tiles.push_back(std::make_shared<CornerTile>(i));
@@ -43,6 +43,7 @@ Board::Board(void) {
     
     int startPosition = (rand() % 4) * 7; // 0, 7, 14 or 21
     this->tiles[startPosition] = std::make_shared<CornerTile>(TileType::START, startPosition);
+    for (int i = 0; i < Board::PLAYERS_COUNT; i++) this->players.push_back(std::make_shared<BotPlayer>(0, startPosition, PlayerType::BOT));
 }
 
 void Board::print(void) {
@@ -76,13 +77,84 @@ void Board::print(void) {
     }
 }
 
-bool Board::buyTerrain(int position, std::shared_ptr<Player> player) {
-    if (this->tiles[position].get()->getType() == TileType::CORNER || this->tiles[position].get()->getType() == TileType::START) return false;
-    SideTile* tile = (SideTile*) this->tiles[position].get();
-    
-    if (player->getBalance() < tile->getPrice()) return false;
+void Board::buyTerrain(SideTile* tile, std::shared_ptr<Player> player) {    
+    if (!player->canBuy(tile)) return;
     player->withdraw(tile->getPrice());
     tile->owner = player;
+}
+
+/* TODO */
+void Board::buildHouse(TileTerrain* tile) {
     
-    return true;
+}
+
+/* TODO */
+void Board::buildHotel(TileHouse* tile) {
+    
+}
+
+void Board::payRent(SideTile* tile, std::shared_ptr<Player> player) {    
+    if (tile->owner == nullptr || tile->owner == player) return;
+
+    if (!player->canPayRent(tile)) {
+        std::cout << "Player " << player->id << " is bankrupt!\n";
+        tile->owner->deposit(player->balance);
+        for (std::shared_ptr<SideTile> tile : player->ownedTiles)
+            this->tiles[tile->position] = std::make_shared<TileTerrain>(tile->type, tile->position);
+
+        this->players.erase(
+            std::find_if(
+                this->players.begin(), this->players.end(), 
+                [player] (std::shared_ptr<Player> const& p) { return p.get() == player.get(); }
+            )
+        );
+
+        return;
+    } else player->transfer(tile->getRent(), tile->owner);
+}
+
+void Board::move(std::shared_ptr<Player> player) {
+    int roll = player->throwDice();
+    int newPosition = (player->position + roll) % 28;
+    player->position = newPosition;
+
+    Tile* cornerTile = this->tiles[newPosition].get();
+    if (cornerTile->getType() == TileType::START) {
+        player->deposit(20);
+        return;
+    }
+
+    if (cornerTile->getType() == TileType::CORNER)
+        return;
+
+
+    SideTile* tile = (SideTile*) this->tiles[newPosition].get();
+    std::cout << "Player " << player->id << " has landed on a " << (char) tile->type << " tile!\n";
+
+    if (tile->owner == nullptr && player->canBuy(tile)) {
+        if (player->type == PlayerType::BOT) {
+            BotPlayer* bot = (BotPlayer*) player.get();
+            if (bot->buyTile(tile)) this->buyTerrain(tile, player);
+            return;
+        }
+
+        std::cout << "Do you want to buy this tile? (S/N): ";
+        char answer;
+        std::cin >> answer;
+        if (answer == 'S' || answer == 's') this->buyTerrain(tile, player);
+    } else if (tile->owner != player) {
+        std::cout << "Player " << player->id << " has paid " << tile->getRent() << "$ to Player " << tile->owner->id << "!\n";
+        this->payRent(tile, player);
+    } else {
+        if (player->type == PlayerType::BOT) {
+            BotPlayer* bot = (BotPlayer*) player.get();
+            if (bot->buyTile(tile)) this->buyTerrain(tile, player);
+            return;
+        }
+
+        std::cout << "Do you want to buy this tile? (S/N): ";
+        char answer;
+        std::cin >> answer;
+        if (answer == 'S' || answer == 's') this->buyTerrain(tile, player);
+    }
 }

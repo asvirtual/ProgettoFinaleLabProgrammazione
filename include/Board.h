@@ -6,6 +6,7 @@
 #include <random>
 
 #include "Tile.h"
+#include "TileHouse.h"
 #include "Player.h"
 
 class Board {
@@ -19,8 +20,11 @@ class Board {
     public:
         Board(void);
         void print(void);
-        bool buyTerrain(int position, std::shared_ptr<Player> player);
-        void payRent(int position, std::shared_ptr<Player> player);
+        void buyTerrain(SideTile* tile, std::shared_ptr<Player> player);
+        void payRent(SideTile* tile, std::shared_ptr<Player> player);
+        void buildHouse(TileTerrain* tile); // TODO
+        void buildHotel(TileHouse* tile); // TODO
+        void move(std::shared_ptr<Player> player);
 };
 
 #endif

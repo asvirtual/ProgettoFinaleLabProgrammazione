@@ -11,6 +11,7 @@ add_executable(main
 	src/CornerTile.cpp
 	src/Player.cpp
 	src/Tile.cpp
+	src/SideTile.cpp
 	src/TileHotel.cpp
 	src/TileHouse.cpp
 	src/TileTerrain.cpp
