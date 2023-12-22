@@ -126,12 +126,7 @@ void Board::move(std::shared_ptr<Player> player) {
 
     Tile* cornerTile = this->tiles[newPosition].get();
     log("Player " + std::to_string(player->id) + " has landed on tile " + std::to_string(newPosition) + "!\n");
-    if (cornerTile->getType() == TileType::START) {
-        player->deposit(20);
-        log("Player " + std::to_string(player->id) + " has landed on the start tile and received 20 fiorini!");
-        return;
-    }
-
+    
     for(int i = 1; i <= roll; i++){
         if(this->tiles[player->position+i]->getType() == TileType::START){
             player->deposit(20);
