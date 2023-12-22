@@ -65,7 +65,7 @@ std::string SideTile::toString(std::vector<std::shared_ptr<Player>>& players) co
     else if (this->building == TileBuilding::HOTEL) toReturn += "^";
     else toReturn += " ";
     
-    for (std::shared_ptr<Player> p : players) {
+    for (const std::shared_ptr<Player>& p : players) {
         if (p->getPosition() == this->position) {
             toReturn += std::to_string(p->getId());
             break;

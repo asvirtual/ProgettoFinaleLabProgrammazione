@@ -40,10 +40,10 @@ class Player {
         int getPosition(void) const { return this->position; };
         void deposit(int amount);
         void withdraw(int amount);
-        void transfer(int amount, std::shared_ptr<Player> player);
+        void transfer(int amount, const std::shared_ptr<Player>& player);
         int throwDice(void);
         bool operator==(const Player& p) const { return this->id == p.id; };
-        std::string toString(void) const { return "Player " + std::to_string(this->id) + " with balance: " + std::to_string(this->balance) + "\n"; };
+        std::string toString(void) const { return "Player " + std::to_string(this->id) + " with balance: " + std::to_string(this->balance); };
         friend class Board;
 };
 

@@ -27,13 +27,12 @@ class Board {
         Board(void);
         const std::vector<std::shared_ptr<Player>>& getPlayers(void) const { return this->players; };
         void print(void);
-        void buyTerrain(SideTile* tile, std::shared_ptr<Player> player);
-        void payRent(SideTile* tile, std::shared_ptr<Player> player);
+        void buyTerrain(SideTile* tile, const std::shared_ptr<Player>& player);
+        void payRent(SideTile* tile, const std::shared_ptr<Player>& player);
         void buildHouse(SideTile* tile); 
         void buildHotel(SideTile* tile); 
-        void move(std::shared_ptr<Player> player);
+        void move(const std::shared_ptr<Player>& player);
         bool isGameOver(void);
-        std::shared_ptr<Player> getWinner(void);
         void getFinalStandings();
 
         friend void gameLoop(Board board);

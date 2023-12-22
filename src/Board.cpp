@@ -53,9 +53,9 @@ void Board::print(void) {
         22                   13
         21 20 19 18 17 16 15 14
     */
-    std::cout << "    ";
+    std::cout << "   ";
     for (int i = 0; i < Board::SIDE_LENGTH; i++)
-        std::cout << "    " << i;
+        std::cout << "     " << i;
 
     std::cout << "\n";
 
@@ -72,33 +72,33 @@ void Board::print(void) {
     }
 }
 
-void Board::buyTerrain(SideTile* tile, std::shared_ptr<Player> player) {
+void Board::buyTerrain(SideTile* tile, const std::shared_ptr<Player>& player) {
     if (player->balance < tile->getTerrainPrice()) return;
     player->withdraw(tile->getTerrainPrice());
     tile->owner = player;
     player->ownedTiles.push_back(std::make_shared<SideTile>(tile->type, tile->position));
-    log("Player " + std::to_string(player->id) + " has bought tile " + std::to_string(tile->position) + "!\n");
+    log("Player " + std::to_string(player->id) + " has bought tile " + std::to_string(tile->position) + "!");
 }
 
 void Board::buildHouse(SideTile* tile) {
     tile->owner->withdraw(tile->getHousePrice());
     tile->building = TileBuilding::HOUSE;
-    log("Player " + std::to_string(tile->owner->id) + " has built a house on tile " + std::to_string(tile->position) + "!\n");
+    log("Player " + std::to_string(tile->owner->id) + " has built a house on tile " + std::to_string(tile->position) + "!");
 }
 
 void Board::buildHotel(SideTile* tile) {
     tile->owner->withdraw(tile->getHotelPrice());
     tile->building = TileBuilding::HOTEL;
-    log("Player " + std::to_string(tile->owner->id) + " has built a hotel on tile " + std::to_string(tile->position) + "!\n");
+    log("Player " + std::to_string(tile->owner->id) + " has built a hotel on tile " + std::to_string(tile->position) + "!");
 }
 
-void Board::payRent(SideTile* tile, std::shared_ptr<Player> player) {    
+void Board::payRent(SideTile* tile, const std::shared_ptr<Player>& player) {    
     if (tile->owner == nullptr || tile->owner == player) return;
 
     if (player->balance < tile->getRent()) {
-        std::cout << "Player " << player->id << " is bankrupt!\n";
+        // std::cout << "Player " << player->id << " is bankrupt!\n";
         tile->owner->deposit(player->balance);
-        for (std::shared_ptr<SideTile> tile : player->ownedTiles) {
+        for (std::shared_ptr<SideTile>& tile : player->ownedTiles) {
             tile->owner = nullptr;
             tile->building = TileBuilding::NONE;
             // this->tiles[tile->position] = std::make_shared<SideTile>(tile->type, tile->position);
@@ -111,32 +111,31 @@ void Board::payRent(SideTile* tile, std::shared_ptr<Player> player) {
             )
         );
 
-        log("Player " + std::to_string(player->id) + " has been removed from the game!\n");
+        log("Player " + std::to_string(player->id) + " has been removed from the game!");
         return;
     } else {
         player->transfer(tile->getRent(), tile->owner);
-        log("Player " + std::to_string(player->id) + " has paid " + std::to_string(tile->getRent()) + "fiorini to Player " + std::to_string(tile->owner->id) + " for rent at tile " + std::to_string(tile->position) + "!\n");
+        log("Player " + std::to_string(player->id) + " has paid " + std::to_string(tile->getRent()) + "fiorini to Player " + std::to_string(tile->owner->id) + " for rent at tile " + std::to_string(tile->position) + "!");
     }
 }
 
-void Board::move(std::shared_ptr<Player> player) {
+void Board::move(const std::shared_ptr<Player>& player) {
     int roll = player->throwDice();
     int newPosition = (player->position + roll) % 28;
     player->position = newPosition;
 
-    Tile* cornerTile = this->tiles[newPosition].get();
-    log("Player " + std::to_string(player->id) + " has landed on tile " + std::to_string(newPosition) + "!\n");
-    if (cornerTile->getType() == TileType::START) {
+    log("Player " + std::to_string(player->id) + " has landed on tile " + std::to_string(newPosition) + "!");
+    if (this->tiles[newPosition]->getType() == TileType::START) {
         player->deposit(20);
         log("Player " + std::to_string(player->id) + " has landed on the start tile and received 20 fiorini!");
         return;
     }
 
-    if (cornerTile->getType() == TileType::CORNER)
+    if (this->tiles[newPosition]->getType() == TileType::CORNER)
         return;
 
     SideTile* tile = (SideTile*) this->tiles[newPosition].get();
-    log("Player " + std::to_string(player->id) + " has landed on a " + (char) tile->type + " tile!\n");
+    log("Player " + std::to_string(player->id) + " has landed on a " + (char) tile->type + " tile!" + "");
 
     if (tile->owner == nullptr && player->balance >= tile->getTerrainPrice()) {
         if (player->type == PlayerType::BOT) {
@@ -148,10 +147,8 @@ void Board::move(std::shared_ptr<Player> player) {
         std::string answer = getUserInput("Do you want to buy this tile? (S/N) ");
         if (answer == "S" || answer == "s") this->buyTerrain(tile, player);
     } else if (tile->owner != player) {
-        // std::cout << "Player " << player->id << " has paid " << tile->getRent() << "fiorini to Player " << tile->owner->id << "!\n";
-        log("Player " + std::to_string(player->id) + " has paid " + std::to_string(tile->getRent()) + "fiorini to Player " + std::to_string(tile->owner->id) + " for rent at tile " + std::to_string(tile->position) + "!\n");
         this->payRent(tile, player);
-    } else {
+    } else if (tile->owner == player) {
         if (
             (tile->building == TileBuilding::NONE && tile->getHousePrice() <= player->balance) ||
             (tile->building == TileBuilding::HOUSE && tile->getHotelPrice() <= player->balance)
@@ -176,7 +173,7 @@ void Board::move(std::shared_ptr<Player> player) {
 }
 
 bool Board::isGameOver(void) {
-    return this->players.size() == 1 || this->turnsCounter == Board::MAX_TURNS;
+    return this->players.size() == 1 || this->turnsCounter >= Board::MAX_TURNS;
 }
 
 void Board::getFinalStandings(void) {
@@ -194,7 +191,7 @@ void Board::getFinalStandings(void) {
     std::cout << (isDraw ? "It's a draw!\n" : "The winner is " + (*players[0]).toString()) << "!\n";
     if (players.size() > 1) {
         int place = 1;
-        for (std::shared_ptr<Player> p : this->players) {
+        for (const std::shared_ptr<Player>& p : this->players) {
             if (std::find(winners.begin(), winners.end(), p.get()) == winners.end()) place++;
             std::cout << place << ") Player: " << *p << "\n";
         }    

@@ -9,7 +9,7 @@ void Player::withdraw(int amount){
     this->balance -= amount;
 }
 
-void Player::transfer(int amount, std::shared_ptr<Player> player) {
+void Player::transfer(int amount, const std::shared_ptr<Player>& player) {
     this->balance -= amount;
     player->balance += amount;
 }
@@ -20,11 +20,11 @@ int Player::throwDice(void) {
         roll += ((rand() % 6) + 1);
     }
 
-    log("Player " + std::to_string(this->id) + " rolled " + std::to_string(roll) + "!\n");
+    log("Player " + std::to_string(this->id) + " rolled " + std::to_string(roll) + "!");
     return roll;
 }
 
 std::ostream& operator<<(std::ostream& os, const Player& p) {
-    return os << "Player " << p.getId() << " with balance: fiorini" << p.getBalance() << "\n";    
+    return os << "Player " << p.getId() << " with balance: fiorini" << p.getBalance();    
 }
 
