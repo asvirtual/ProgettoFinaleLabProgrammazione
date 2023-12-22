@@ -145,7 +145,8 @@ void Board::move(std::shared_ptr<Player> player) {
             return;
         }
 
-        std::string answer = getUserInput("Do you want to buy this tile? (S/N) ");
+        std::string answer = getUserInput("Do you want to buy this tile? (S/N) - show to print board ");
+        if(answer == "show") this->print();
         if (answer == "S" || answer == "s") this->buyTerrain(tile, player);
     } else if (tile->owner != player) {
         // std::cout << "Player " << player->id << " has paid " << tile->getRent() << "fiorini to Player " << tile->owner->id << "!\n";
@@ -165,8 +166,9 @@ void Board::move(std::shared_ptr<Player> player) {
                 return;
             }
 
-            std::string question =  "Do you want to build a" + std::string(tile->building == TileBuilding::NONE ? " house" : " hotel") + "? (S/N) ";
+            std::string question =  "Do you want to build a" + std::string(tile->building == TileBuilding::NONE ? " house" : " hotel") + "? (S/N) - show to print board ";
             std::string answer = getUserInput(question);
+            if(answer == "show") this->print();
             if (answer == "S" || answer == "s") {
                 if (tile->building == TileBuilding::NONE) this->buildHouse(tile);
                 else this->buildHotel(tile);
