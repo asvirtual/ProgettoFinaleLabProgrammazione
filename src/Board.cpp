@@ -145,7 +145,7 @@ void Board::move(std::shared_ptr<Player> player) {
     } else {
         if (player->type == PlayerType::BOT) {
             BotPlayer* bot = (BotPlayer*) player.get();
-            if (bot->buyTile(tile)) this->buyTerrain(tile, player);
+            if (bot->wantsToBuy(tile)) this->buyTerrain(tile, player);
             return;
         }
 
