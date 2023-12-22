@@ -115,7 +115,7 @@ void Board::payRent(SideTile* tile, const std::shared_ptr<Player>& player) {
         return;
     } else {
         player->transfer(tile->getRent(), tile->owner);
-        log("Player " + std::to_string(player->id) + " has paid " + std::to_string(tile->getRent()) + "fiorini to Player " + std::to_string(tile->owner->id) + " for rent at tile " + std::to_string(tile->position) + "!");
+        log("Player " + std::to_string(player->id) + " has paid " + std::to_string(tile->getRent()) + " fiorini to Player " + std::to_string(tile->owner->id) + " for rent at tile " + std::to_string(tile->position) + "!");
     }
 }
 
