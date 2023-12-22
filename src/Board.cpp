@@ -132,9 +132,10 @@ void Board::move(std::shared_ptr<Player> player) {
         return;
     }
 
-    for(int i = 0; i < roll; i++){
-        if(this->tiles[i]->getType() == TileType::START){
+    for(int i = 1; i <= roll; i++){
+        if(this->tiles[player->position+i]->getType() == TileType::START){
             player->deposit(20);
+            log("Player " + std::to_string(player->id) + " has passed by the start tile and received 20 fiorini!");
             break;
         }
     }
