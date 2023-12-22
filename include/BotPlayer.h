@@ -9,7 +9,7 @@
 class BotPlayer : public Player {
     public:
         BotPlayer(void) : Player() {};
-        BotPlayer(int b, int p) : Player(b, p, PlayerType::BOT) {};
+        BotPlayer(int p) : Player(p, PlayerType::BOT) {};
         bool getDecision();
 };
 

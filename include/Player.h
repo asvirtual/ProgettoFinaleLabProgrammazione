@@ -31,7 +31,8 @@ class Player {
 
     public:
         Player(void) : balance(100), id(playersCounter++), position(0), type(PlayerType::BOT) {};
-        Player(int b, int p, PlayerType t) : balance(100), id(playersCounter++), position(p), type(t) {};
+        Player(int p) : balance(100), id(playersCounter++), position(p), type(PlayerType::HUMAN) {};
+        Player(int p, PlayerType t) : balance(100), id(playersCounter++), position(p), type(t) {};
         
         void print(void) {};
         int getBalance(void) const { return this->balance; };

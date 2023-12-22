@@ -36,9 +36,9 @@ Board::Board(void) {
     
     int startPosition = (rand() % 4) * 7; // 0, 7, 14 or 21
     this->tiles[startPosition] = std::make_shared<CornerTile>(TileType::START, startPosition);
-    // for (int i = 0; i < Board::PLAYERS_COUNT; i++) this->players.push_back(std::make_shared<BotPlayer>(0, startPosition));
-    this->players.push_back(std::make_shared<BotPlayer>(0, startPosition));
-    this->players.push_back(std::make_shared<Player>(1, startPosition, PlayerType::HUMAN));
+    for (int i = 0; i < Board::PLAYERS_COUNT - 1; i++) this->players.push_back(std::make_shared<BotPlayer>(startPosition));
+    // this->players.push_back(std::make_shared<BotPlayer>(0, startPosition));
+    // this->players.push_back(std::make_shared<Player>(1, startPosition, PlayerType::HUMAN));
 }
 
 void Board::print(void) {
@@ -55,7 +55,7 @@ void Board::print(void) {
     */
     std::cout << "    ";
     for (int i = 0; i < Board::SIDE_LENGTH; i++)
-        std::cout << "   " << i;
+        std::cout << "    " << i;
 
     std::cout << "\n";
 
@@ -66,7 +66,7 @@ void Board::print(void) {
                 int idx = (row + col >= 2 * row) ? row + col : (Board::SIDE_LENGTH * 4 - 4) - (row + col);
                 std::cout << "|" << this->tiles[idx]->toString(this->players) << "| ";
             } else
-                std::cout << "    ";
+                std::cout << "      ";
         }
         std::cout << "\n";
     }
@@ -136,7 +136,7 @@ void Board::move(std::shared_ptr<Player> player) {
         return;
 
     SideTile* tile = (SideTile*) this->tiles[newPosition].get();
-    std::cout << "Player " << player->id << " has landed on a " << (char) tile->type << " tile!\n";
+    log("Player " + std::to_string(player->id) + " has landed on a " + (char) tile->type + " tile!\n");
 
     if (tile->owner == nullptr && player->balance >= tile->getTerrainPrice()) {
         if (player->type == PlayerType::BOT) {
@@ -148,7 +148,8 @@ void Board::move(std::shared_ptr<Player> player) {
         std::string answer = getUserInput("Do you want to buy this tile? (S/N) ");
         if (answer == "S" || answer == "s") this->buyTerrain(tile, player);
     } else if (tile->owner != player) {
-        std::cout << "Player " << player->id << " has paid " << tile->getRent() << "fiorini to Player " << tile->owner->id << "!\n";
+        // std::cout << "Player " << player->id << " has paid " << tile->getRent() << "fiorini to Player " << tile->owner->id << "!\n";
+        log("Player " + std::to_string(player->id) + " has paid " + std::to_string(tile->getRent()) + "fiorini to Player " + std::to_string(tile->owner->id) + " for rent at tile " + std::to_string(tile->position) + "!\n");
         this->payRent(tile, player);
     } else {
         if (

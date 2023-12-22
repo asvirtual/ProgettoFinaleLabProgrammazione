@@ -16,5 +16,8 @@ std::string CornerTile::toString(std::vector<std::shared_ptr<Player>>& players) 
         }
     }
 
+    if (toReturn.length() == 1) toReturn += "  ";
+    if (toReturn.length() == 2) toReturn += " ";
+
     return toReturn;
 };
