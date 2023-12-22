@@ -143,15 +143,6 @@ void Board::move(std::shared_ptr<Player> player) {
         std::cout << "Player " << player->id << " has paid " << tile->getRent() << "$ to Player " << tile->owner->id << "!\n";
         this->payRent(tile, player);
     } else {
-        if (player->type == PlayerType::BOT) {
-            BotPlayer* bot = (BotPlayer*) player.get();
-            if (bot->buyTile(tile)) this->buyTerrain(tile, player);
-            return;
-        }
-
-        std::cout << "Do you want to buy this tile? (S/N): ";
-        char answer;
-        std::cin >> answer;
-        if (answer == 'S' || answer == 's') this->buyTerrain(tile, player);
+        // TODO: Build house or hotel
     }
 }
