@@ -36,7 +36,7 @@ Board::Board(void) {
     
     int startPosition = (rand() % 4) * 7; // 0, 7, 14 or 21
     this->tiles[startPosition] = std::make_shared<CornerTile>(TileType::START, startPosition);
-    for (int i = 0; i < Board::PLAYERS_COUNT - 1; i++) this->players.push_back(std::make_shared<BotPlayer>(startPosition));
+    for (int i = 0; i < Board::PLAYERS_COUNT; i++) this->players.push_back(std::make_shared<BotPlayer>(startPosition));
     // this->players.push_back(std::make_shared<BotPlayer>(0, startPosition));
     // this->players.push_back(std::make_shared<Player>(1, startPosition, PlayerType::HUMAN));
 }
@@ -194,7 +194,7 @@ void Board::getFinalStandings(void) {
 
     std::cout << (isDraw ? "It's a draw!\n" : "The winner is " + (*players[0]).toString()) << "!\n";
     if (players.size() > 1) {
-        int place = 1;
+        int place = 0;
         for (const std::shared_ptr<Player>& p : this->players) {
             if (std::find(winners.begin(), winners.end(), p.get()) == winners.end()) place++;
             std::cout << place << ") Player: " << *p << "\n";

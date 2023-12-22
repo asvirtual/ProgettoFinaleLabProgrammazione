@@ -32,7 +32,7 @@ void gameLoop(Board board) {
     std::swap(board.players[0], board.players[firstPlayerIdx]);
 
     int turn = 0;
-    while (!board.isGameOver()){// && turn < Board::MAX_TURNS) {
+    while (!board.isGameOver() && turn < Board::MAX_TURNS) {
         turn++;
         std::cout << "New turn!" << turn << "\n";
         for (const std::shared_ptr<Player>& player: board.getPlayers()) {
