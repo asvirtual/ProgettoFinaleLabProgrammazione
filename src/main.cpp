@@ -1,3 +1,11 @@
+/*  ##################################################################
+    # Progetto finale "Laboratorio di Programmazione C++ - Monopoly" #
+    #           A.A. 2023-2034 - Gruppo Riferimenti& Confusi         #
+    #                                                                #
+    #         Giordano Alberti, Andrea Boscarin, Federico Zardo      #
+    #                                                                #                    
+    ##################################################################
+*/
 #include "Board.h"
 #include "monopoly.h"
 
