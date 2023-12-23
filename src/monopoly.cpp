@@ -3,13 +3,13 @@
 
 std::ofstream logFile;
 
-char nthLetter(int idx)
+char monopUtil::nthLetter(int idx)
 {
     if (idx < 0 || idx > 20) return ' ';
     return "ABCDEFGHILMNOPQRSTUVZ"[idx];
 }
 
-void gameLoop(Board board) {
+void monopUtil::gameLoop(Board board) {
     int max;
     int firstPlayerIdx = 0;
 
@@ -37,10 +37,10 @@ void gameLoop(Board board) {
     board.getFinalStandings();
 }
 
-void log(std::string message) {
+void monopUtil::log(std::string message) {
     std::cout << message << "\n";
     logFile << message << "\n";
 }
 
-void openLogFile(void) { logFile.open("log.txt"); }
-void closeLogFile(void) { logFile.close(); }
+void monopUtil::openLogFile(void) { logFile.open("log.txt"); }
+void monopUtil::closeLogFile(void) { logFile.close(); }

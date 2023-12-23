@@ -14,7 +14,7 @@ int main(int argc, char *argv[]) {
     srand(time(0));
 
     Board b = Board(argv[1] == "human");
-    gameLoop(b);
+    monopUtil::gameLoop(b);
     
     return 0;
 }

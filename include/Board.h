@@ -34,7 +34,7 @@ class Board {
 
         Board(void);
         Board(bool humanPlayer);
-        ~Board() { closeLogFile(); };
+        ~Board() { monopUtil::closeLogFile(); };
         const std::vector<std::shared_ptr<Player>>& getPlayers(void) const { return this->players; };
         void print(void);
         void move(const std::shared_ptr<Player>& player);
@@ -43,7 +43,7 @@ class Board {
         int getStartingPosition(void);
         std::string getUserInput(std::string message);
 
-        friend void gameLoop(Board board);
+        friend void monopUtil::gameLoop(Board board);
 };
 
 #endif

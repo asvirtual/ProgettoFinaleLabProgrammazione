@@ -31,16 +31,16 @@ std::string Tile::toCoordinates(void) const {
     std::string coords;
 
     if (this->position <= Board::TILES_COUNT / 4) 
-        coords = nthLetter(0) + std::to_string(this->position + 1);
+        coords = monopUtil::nthLetter(0) + std::to_string(this->position + 1);
 
     else if (this->position <= Board::TILES_COUNT / 2) 
-        coords = nthLetter(this->position - 7) + std::to_string(8);
+        coords = monopUtil::nthLetter(this->position - 7) + std::to_string(8);
 
     else if (this->position <= 3 * Board::TILES_COUNT / 4) 
-        coords = nthLetter(7) + std::to_string(abs(this->position - (3 * Board::TILES_COUNT / 4 + 1)));
+        coords = monopUtil::nthLetter(7) + std::to_string(abs(this->position - (3 * Board::TILES_COUNT / 4 + 1)));
 
     else 
-        coords = nthLetter(abs(this->position - Board::TILES_COUNT)) + std::to_string(1);
+        coords = monopUtil::nthLetter(abs(this->position - Board::TILES_COUNT)) + std::to_string(1);
 
     return coords;
 }
