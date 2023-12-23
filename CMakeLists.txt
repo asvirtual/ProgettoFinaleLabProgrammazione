@@ -12,4 +12,5 @@ add_executable(main
 	src/Player.cpp
 	src/SideTile.cpp
 	src/monopoly.cpp
+	src/Tile.cpp
 )

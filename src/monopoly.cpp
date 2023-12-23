@@ -1,20 +1,13 @@
 #include "monopoly.h"
+#include <fstream>
+
+std::ofstream logFile;
+
 
 char nthLetter(int idx)
 {
     if (idx < 0 || idx > 20) return ' ';
     return "ABCDEFGHILMNOPQRSTUVZ"[idx];
-}
-
-std::string getUserInput(std::string message) {
-    std::string answer;
-
-    do {
-        std::cout << message;
-        std::cin >> answer;
-    } while (answer != "S" && answer != "s" && answer != "N" && answer != "n" && answer != "show");
-
-    return answer;
 }
 
 void gameLoop(Board board) {
@@ -37,14 +30,23 @@ void gameLoop(Board board) {
         for (const std::shared_ptr<Player>& player: board.getPlayers()) {
             if (player.get() == nullptr) continue;
             board.move(player);
-            log("Player " + std::to_string(player->getId()) + " has ended his turn" + "!\n");
+            log("Giocatore " + std::to_string(player->getId()) + " ha finito il turno");
+            board.print();
         }
     }
 
-    std::cout << "End of the game!\n";
     board.getFinalStandings();
 }
 
 void log(std::string message) {
     std::cout << message << "\n";
+    logFile << message << "\n";
+}
+
+void openLogFile(void) {
+    logFile.open("log.txt");
+}
+
+void closeLogFile(void) {
+    logFile.close();
 }
