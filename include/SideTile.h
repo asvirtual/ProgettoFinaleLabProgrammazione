@@ -16,6 +16,8 @@ class SideTile : public Tile {
         TileBuilding building;
 
     public:
+        static constexpr int TILES_TYPES_COUNT = 3;
+
         SideTile(void) {};
         SideTile(TileType t, int p) : Tile(t, p), building(TileBuilding::NONE) {};
         ~SideTile() {};
@@ -23,7 +25,7 @@ class SideTile : public Tile {
         int getHotelPrice(void);
         int getTerrainPrice(void);
         int getRent(void);
-        std::string toString(std::vector<std::shared_ptr<Player>>& players) const;
+        std::string toString(const std::vector<std::shared_ptr<Player>>& players) const;
         friend class Board;
 };
 

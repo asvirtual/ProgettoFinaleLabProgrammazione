@@ -1,5 +1,5 @@
 #include "Player.h"
-#include "helperFunctions.h"
+#include "monopoly.h"
 
 void Player::deposit(int amount){
     this->balance += amount;
@@ -16,15 +16,14 @@ void Player::transfer(int amount, const std::shared_ptr<Player>& player) {
 
 int Player::throwDice(void) {
     int roll = 0;
-    for (int i = 0; i < 2; i++) {
+    for (int i = 0; i < 2; i++)
         roll += ((rand() % 6) + 1);
-    }
 
     log("Player " + std::to_string(this->id) + " rolled " + std::to_string(roll) + "!");
     return roll;
 }
 
 std::ostream& operator<<(std::ostream& os, const Player& p) {
-    return os << "Player " << p.getId() << " with balance: fiorini" << p.getBalance();    
+    return os << p.toString();    
 }
 
