@@ -3,7 +3,6 @@
 
 std::ofstream logFile;
 
-
 char nthLetter(int idx)
 {
     if (idx < 0 || idx > 20) return ' ';
@@ -25,13 +24,13 @@ void gameLoop(Board board) {
     std::swap(board.players[0], board.players[firstPlayerIdx]);
 
     int turn = 0;
+    board.print();
     while (!board.isGameOver() && turn < Board::MAX_TURNS) {
         turn++;
         for (const std::shared_ptr<Player>& player: board.getPlayers()) {
             if (player.get() == nullptr) continue;
             board.move(player);
             log("Giocatore " + std::to_string(player->getId()) + " ha finito il turno");
-            board.print();
         }
     }
 
@@ -43,10 +42,5 @@ void log(std::string message) {
     logFile << message << "\n";
 }
 
-void openLogFile(void) {
-    logFile.open("log.txt");
-}
-
-void closeLogFile(void) {
-    logFile.close();
-}
+void openLogFile(void) { logFile.open("log.txt"); }
+void closeLogFile(void) { logFile.close(); }

@@ -19,6 +19,7 @@ class SideTile : public Tile {
         static constexpr int TILES_TYPES_COUNT = 3;
 
         SideTile(void) {};
+        SideTile(SideTile& t) : Tile(t), owner(t.owner), building(t.building) {};
         SideTile(TileType t, int p) : Tile(t, p), building(TileBuilding::NONE) {};
         ~SideTile() {};
         int getHousePrice(void);

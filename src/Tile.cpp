@@ -5,7 +5,6 @@
 #include "monopoly.h"
 
 std::string Tile::toCoordinates(void) const {
-    // 0 1 2 3 4 ... 27
     /*
         0  1  2  3  4  5  6  7
         27                   8
@@ -31,10 +30,17 @@ std::string Tile::toCoordinates(void) const {
 
     std::string coords;
 
-    if (this->position <= Board::TILES_COUNT / 4) coords = nthLetter(0) + std::to_string(this->position + 1);
-    else if (this->position <= Board::TILES_COUNT / 2) coords = nthLetter(this->position - 7) + std::to_string(8);
-    else if (this->position <= 3 * Board::TILES_COUNT / 4) coords = nthLetter(7) + std::to_string(abs(this->position - (Board::TILES_COUNT / 4 * 3 + 1)));
-    else coords = nthLetter(abs(this->position - Board::TILES_COUNT)) + std::to_string(1);
+    if (this->position <= Board::TILES_COUNT / 4) 
+        coords = nthLetter(0) + std::to_string(this->position + 1);
+
+    else if (this->position <= Board::TILES_COUNT / 2) 
+        coords = nthLetter(this->position - 7) + std::to_string(8);
+
+    else if (this->position <= 3 * Board::TILES_COUNT / 4) 
+        coords = nthLetter(7) + std::to_string(abs(this->position - (3 * Board::TILES_COUNT / 4 + 1)));
+
+    else 
+        coords = nthLetter(abs(this->position - Board::TILES_COUNT)) + std::to_string(1);
 
     return coords;
 }

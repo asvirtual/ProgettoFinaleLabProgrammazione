@@ -14,6 +14,7 @@ class Tile {
         int position;
         Tile(void) {};
         Tile(TileType t, int p) : type(t), position(p) {};
+        Tile(Tile& t) : type(t.type), position(t.position) {};
 
     public:
         TileType getType(void) const { return this->type; };
