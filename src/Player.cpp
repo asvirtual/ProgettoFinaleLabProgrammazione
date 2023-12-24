@@ -1,17 +1,17 @@
 #include "Player.h"
 #include "monopoly.h"
 
-void Player::deposit(int amount){
+void Player::deposit(int amount) {
     this->balance += amount;
 }
 
-void Player::withdraw(int amount){
+void Player::withdraw(int amount) {
     this->balance -= amount;
 }
 
 void Player::transfer(int amount, const std::shared_ptr<Player>& player) {
-    this->balance -= amount;
-    player->balance += amount;
+    this->withdraw(amount);
+    player->deposit(amount);
 }
 
 int Player::throwDice(void) {

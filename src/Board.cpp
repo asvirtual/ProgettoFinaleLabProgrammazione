@@ -21,6 +21,7 @@ Board::Board(bool humanPlayer) {
 
 void Board::generatePlayers(void) {
     int startPosition = this->getStartingPosition();
+    // If called before generateTiles() throws an exception
     if (startPosition == -1) throw std::runtime_error("Couldn't generate players, starting position not found");
     
     if (!this->humanPlayer) {
@@ -40,6 +41,8 @@ void Board::generateTiles(void) {
         if (i % (Board::TILES_COUNT / 4) == 0) this->tiles.push_back(std::make_shared<CornerTile>(i));
         else {
             TileType tileType;
+            // Generate a random tile type, but keep the number of tiles of each type under the maximum value by
+            // only breaking the switch statement if the counter of the current tile type is under the maximum value
             switch (rand() % SideTile::TILES_TYPES_COUNT) {
                 case 1:
                     if (luxuryCounter < Tile::LUXURY_COUNT) {
@@ -47,12 +50,14 @@ void Board::generateTiles(void) {
                         tileType = TileType::LUXURY;
                         break;
                     }
+
                 case 2:
                     if (economyCounter < Tile::ECONOMY_COUNT) {
                         economyCounter++;
                         tileType = TileType::ECONOMY;
                         break;
                     }
+
                 default:
                     standardCounter++;
                     tileType = TileType::STANDARD;
@@ -63,20 +68,25 @@ void Board::generateTiles(void) {
         }
     }
     
-    int startPosition = (rand() % 4) * (Board::TILES_COUNT / 4); // 0, 7, 14 or 21
+    // Randomly set the start tile
+    int startPosition = (rand() % 4) * (Board::TILES_COUNT / 4);
     this->tiles[startPosition] = std::make_shared<CornerTile>(TileType::START, startPosition);
 }
 
 void Board::print(void) {
-    // 0 1 2 3 4 ... 27
-    /*
+    /* If the board is printed as a matrix, the tiles' vector indexes are mapped to the matrix-like structure as follows:
+        - if the tile is after the main diagonal (row + col >= 2 * row), the index is mapped to the sum of the row and column
+        - if the tile is before the main diagonal (row + col < 2 * row), the index is mapped to the difference between the the number of tiles sum of the row and column
+
+        0 1 2 3 4 ... 27
+
         0  1  2  3  4  5  6  7
-        27                   8
-        26                   9
-        25                   10
-        24                   11
-        23                   12
-        22                   13
+        27 *                 8
+        26    *              9
+        25       *           10
+        24          *        11
+        23             *     12
+        22                *  13
         21 20 19 18 17 16 15 14
     */
     std::cout << "\n   ";
@@ -89,10 +99,15 @@ void Board::print(void) {
         for (int col = 0; col < Board::SIDE_LENGTH; col++) {
             if (col == 0) std::cout << " " << monopUtil::nthLetter(row) << "    ";
             if (row == 0 || row == Board::SIDE_LENGTH - 1 || col == 0 || col == Board::SIDE_LENGTH - 1) {
-                int idx = (row + col >= 2 * row) ? row + col : (Board::SIDE_LENGTH * 4 - 4) - (row + col);
+                // Map the row and column to the tiles' vector index (0..27)
+                int idx = 
+                    (row + col >= 2 * row) ? 
+                    row + col : 
+                    (Board::TILES_COUNT) - (row + col);
+
                 std::cout << "|" << this->tiles[idx]->toString(this->players) << "| ";
             } else
-                std::cout << "      ";
+                std::cout << "      "; // Inner spaces
         }
 
         std::cout << "\n";
@@ -100,6 +115,7 @@ void Board::print(void) {
 
     std::cout << "\n";
 
+    // Print players' owned tiles and balance
     for (const std::shared_ptr<Player>& player : this->players) {
         std::cout << player->toString() << ": ";
         for (const std::shared_ptr<SideTile>& tile : player->ownedTiles) 
@@ -112,6 +128,7 @@ void Board::print(void) {
 }
 
 int Board::getStartingPosition(void) {
+    // If called before generateTiles() returns invalid position
     if (this->tiles.size() == 0) return -1;
 
     return std::find_if(
@@ -140,8 +157,11 @@ void Board::buildHotel(SideTile* tile) {
 }
 
 void Board::payRent(SideTile* tile, const std::shared_ptr<Player>& player) {
+    // If the player doesn't have enough money to pay the rent, he is eliminated
     if (player->balance < tile->getRent()) {
+        // The owner gets all the player's money
         tile->owner->deposit(player->balance);
+        // The player's owned tiles are freed and their buildings are reset
         for (const std::shared_ptr<SideTile>& ownedTile : player->ownedTiles) {
             ownedTile->owner = nullptr;
             ownedTile->building = TileBuilding::NONE;
@@ -165,6 +185,7 @@ void Board::payRent(SideTile* tile, const std::shared_ptr<Player>& player) {
 void Board::move(const std::shared_ptr<Player>& player) {
     int roll = player->throwDice();
 
+    // Check if the player's trajectory passes through the start tile
     for (int i = 1; i <= roll; i++){
         if (this->tiles[(player->position + i) % Board::TILES_COUNT]->getType() == TileType::START) {
             player->deposit(20);
@@ -178,6 +199,8 @@ void Board::move(const std::shared_ptr<Player>& player) {
 
     if (this->tiles[player->position]->getType() == TileType::CORNER || this->tiles[player->position]->getType() == TileType::START)
         return;
+
+    // If the function hasn't returned, the tile is a SideTile, handle payments and buildings
 
     SideTile* tile = (SideTile*) this->tiles[player->position].get();
     if (tile->owner == nullptr && player->balance >= tile->getTerrainPrice()) {
@@ -227,6 +250,7 @@ void Board::getFinalStandings(void) {
         [] (const std::shared_ptr<Player> p1, const std::shared_ptr<Player> p2) { return p1->getBalance() > p2->getBalance(); }
     );
 
+    // Check if there is a draw
     bool isDraw = false;
     for (int i = 1; i < this->players.size() - 1; i++) {
         if (this->players[i]->balance == this->players[0]->balance) {
@@ -237,6 +261,7 @@ void Board::getFinalStandings(void) {
     }
 
     monopUtil::log(isDraw ? "Pareggio" : ("Giocatore " + std::to_string(players[0]->id) + " ha vinto la partita"));
+    // If there is a draw or the game ended because it reached the maximum number of turns, print the players' rankings
     if (players.size() > 1) {
         int place = 0;
         for (const std::shared_ptr<Player>& p : this->players) {

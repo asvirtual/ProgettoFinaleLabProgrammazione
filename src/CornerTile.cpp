@@ -9,6 +9,7 @@ std::string CornerTile::toString(const std::vector<std::shared_ptr<Player>>& pla
     std::string toReturn;
     toReturn += (char) this->type;
     
+    // Check if there is a player on the tile
     for (const std::shared_ptr<Player>& p : players) {
         if (p->getPosition() == this->position) {
             toReturn += std::to_string(p->getId());
@@ -16,8 +17,7 @@ std::string CornerTile::toString(const std::vector<std::shared_ptr<Player>>& pla
         }
     }
 
-    if (toReturn.length() == 1) toReturn += "  ";
-    if (toReturn.length() == 2) toReturn += " ";
-
+    // Pad the string with spaces to make it 3 characters long
+    while (toReturn.length() < 3) toReturn += " ";
     return toReturn;
 };
