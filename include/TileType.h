@@ -1,3 +1,5 @@
+// Author: Federico Zardo
+
 #ifndef TILETYPE_H
 #define TILETYPE_H
 

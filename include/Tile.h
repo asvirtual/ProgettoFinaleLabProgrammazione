@@ -1,3 +1,5 @@
+// Author: Federico Zardo
+
 #ifndef TILE_H
 #define TILE_H
 

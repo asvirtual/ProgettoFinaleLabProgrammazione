@@ -1,3 +1,5 @@
+// Author: Giordano Alberti
+
 #ifndef CORNER_TILE_H
 #define CORNER_TILE_H
 

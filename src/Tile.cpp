@@ -1,3 +1,5 @@
+// Author: Federico Zardo
+
 #include <string>
 
 #include "Tile.h"

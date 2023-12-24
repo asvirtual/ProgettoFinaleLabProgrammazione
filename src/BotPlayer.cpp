@@ -1,3 +1,5 @@
+// Author: Federico Zardo
+
 #include "BotPlayer.h"
 
 bool BotPlayer::getDecision() {

@@ -1,3 +1,5 @@
+// Author: Andrea Boscarin
+
 #ifndef SIDE_TILE_H
 #define SIDE_TILE_H
 

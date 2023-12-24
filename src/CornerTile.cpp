@@ -1,3 +1,5 @@
+// Author: Giordano Alberti
+
 #include <vector>
 #include <string>
 #include <memory>

@@ -1,3 +1,5 @@
+// Author: Andrea Boscarin
+
 /*  ##################################################################
     # Progetto finale "Laboratorio di Programmazione C++ - Monopoly" #
     #           A.A. 2023-2034 - Gruppo Riferimenti& Confusi         #

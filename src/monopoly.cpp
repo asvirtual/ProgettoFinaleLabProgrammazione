@@ -1,3 +1,5 @@
+// Author: Giordano Alberti
+
 #include "monopoly.h"
 #include <fstream>
 

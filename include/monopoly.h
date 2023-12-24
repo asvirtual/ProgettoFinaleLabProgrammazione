@@ -1,3 +1,5 @@
+// Author: Giordano Alberti
+
 #include <iostream>
 #include <string>
 

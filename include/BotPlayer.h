@@ -1,3 +1,5 @@
+// Author: Federico Zardo
+
 #ifndef BOTPLAYER_H
 #define BOTPLAYER_H
 

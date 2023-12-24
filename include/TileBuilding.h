@@ -1,3 +1,5 @@
+// Author: Giordano Alberti
+
 #ifndef TILEBUILDING_H
 #define TILEBUILDING_H
 

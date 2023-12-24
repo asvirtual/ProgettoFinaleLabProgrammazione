@@ -1,3 +1,5 @@
+// Author: Andrea Boscarin
+
 #include <algorithm>
 
 #include "SideTile.h"
