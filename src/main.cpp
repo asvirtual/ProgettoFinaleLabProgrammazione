@@ -15,7 +15,7 @@
 
 int main(int argc, char *argv[]) {
     // Check if the user has provided a valid argument
-    if (argc != 1 && (std::string(argv[1]) != "computer" && std::string(argv[1]) != "human")) {
+    if (argc != 1 || ((std::string(argv[1]) != "computer" && std::string(argv[1]) != "human"))) {
         std::cerr << "Inserisci human per giocare contro 3 bot o computer per assistere a una partita tra 4 bot" << std::endl;
         throw std::invalid_argument("Invalid argument");
     }
