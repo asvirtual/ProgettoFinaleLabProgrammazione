@@ -21,7 +21,7 @@ int main(int argc, char *argv[]) {
         
     srand(time(0));
 
-    Board b = Board(std::string(argv[1]) == "human");
+    Board b = Board(argv[1] == "human");
     monopUtil::gameLoop(b);
     
     return 0;
