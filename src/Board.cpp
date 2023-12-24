@@ -24,7 +24,7 @@ void Board::generatePlayers(void) {
     // If called before generateTiles() throws an exception
     if (startPosition == -1) throw std::runtime_error("Couldn't generate players, starting position not found");
     
-    if (!this->humanPlayer) {
+    if (this->humanPlayer) {
         this->players.push_back(std::make_shared<Player>(startPosition));
         for (int i = 0; i < Board::PLAYERS_COUNT - 1; i++) this->players.push_back(std::make_shared<BotPlayer>(startPosition));
     } else {
