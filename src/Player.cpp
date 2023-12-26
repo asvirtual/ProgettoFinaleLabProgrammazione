@@ -23,6 +23,10 @@ int Player::throwDice(void) {
     return roll;
 }
 
+void Player::newRoll(void){
+    this->initRoll = this->throwDice();
+}
+
 std::ostream& operator<<(std::ostream& os, const Player& p) {
     return os << p.toString();    
 }

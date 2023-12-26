@@ -12,18 +12,14 @@ char monopUtil::nthLetter(int idx)
     return "ABCDEFGHILMNOPQRSTUVZ"[idx];
 }
 
-bool monopUtil::compareRolls(std::shared_ptr<Player> p1, std::shared_ptr<Player> p2) {
-    int roll1 = p1->throwDice();
-    int roll2 = p2->throwDice();
-
-    if(roll1 == roll2){
-        log("Giocatore " + std::to_string(p1->getId()) + " e giocatore " + std::to_string(p2->getId()) + " hanno tirato lo stesso valore, si ripete il tiro");
-        return compareRolls(p1, p2);
+bool monopUtil::compareRolls(const std::shared_ptr<Player>& p1, const std::shared_ptr<Player>& p2) {
+    if(p1->getInitRoll() == p2->getInitRoll()){
+        do{
+            p1->newRoll();
+            p2->newRoll();
+        }while(p1->getInitRoll() == p2->getInitRoll());
     }
-    else{
-        log("Giocatore " + std::to_string(p1->getId()) + " ha tirato " + std::to_string(roll1) + " e giocatore " + std::to_string(p2->getId()) + " ha tirato " + std::to_string(roll2));
-        return roll1 > roll2;   
-    }
+    return p1->getInitRoll() > p2->getInitRoll();
 }
 
 void monopUtil::gameLoop(Board board) {
