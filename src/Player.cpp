@@ -1,5 +1,3 @@
-// Author: Andrea Boscarin
-
 #include "Player.h"
 #include "monopoly.h"
 
