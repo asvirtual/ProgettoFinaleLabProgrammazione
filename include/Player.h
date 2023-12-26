@@ -45,7 +45,7 @@ class Player {
         int getId(void) const { return this->id; };
         int getPosition(void) const { return this->position; };
         int getInitRoll(void) const { return this->initRoll; };
-        void newRoll(void);
+        void newRoll(void); // Simulates a new dice roll and stores the result in initRoll in case some players roll the sama number
         void deposit(int amount);
         void withdraw(int amount);
         void transfer(int amount, const std::shared_ptr<Player>& player); // Transfers an amount of money from the instance player to another player

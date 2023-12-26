@@ -15,6 +15,7 @@ char monopUtil::nthLetter(int idx)
 bool monopUtil::compareRolls(const std::shared_ptr<Player>& p1, const std::shared_ptr<Player>& p2) {
     if(p1->getInitRoll() == p2->getInitRoll()){
         do{
+            log("Giocatore " + std::to_string(p1->getId()) + " e giocatore " + std::to_string(p2->getId()) + " hanno tirato lo stesso valore, si ripete il tiro");
             p1->newRoll();
             p2->newRoll();
         }while(p1->getInitRoll() == p2->getInitRoll());
