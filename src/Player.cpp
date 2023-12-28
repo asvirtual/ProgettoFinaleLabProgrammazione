@@ -1,5 +1,3 @@
-// Author: Andrea Boscarin
-
 #include "Player.h"
 #include "monopoly.h"
 
@@ -23,6 +21,10 @@ int Player::throwDice(void) {
 
     monopUtil::log("Giocatore " + std::to_string(this->id) + " ha tirato i dadi ottenendo un valore di " + std::to_string(roll));
     return roll;
+}
+
+void Player::newRoll(void){
+    this->initRoll = this->throwDice();
 }
 
 std::ostream& operator<<(std::ostream& os, const Player& p) {

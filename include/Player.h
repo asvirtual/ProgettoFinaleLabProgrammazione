@@ -29,20 +29,23 @@ class Player {
         int balance;
         int position;
         int id;
+        int initRoll; // Stores the result of the dice roll at the beginning of the game
         PlayerType type;
         std::vector<std::shared_ptr<SideTile>> ownedTiles; // Vector of pointers to the tiles owned by the player
 
     public:
         // Default constructor, creates a bot player without knowing the board's starting position
-        Player(void) : balance(STARTING_BALANCE), id(playersCounter++), position(0), type(PlayerType::BOT) {}; 
+        Player(void) : balance(STARTING_BALANCE), id(playersCounter++), position(0), type(PlayerType::BOT), initRoll(this->throwDice()) {}; 
         // Creates a human player knowing the board's starting position
-        Player(int p) : balance(STARTING_BALANCE), id(playersCounter++), position(p), type(PlayerType::HUMAN) {};
+        Player(int p) : balance(STARTING_BALANCE), id(playersCounter++), position(p), type(PlayerType::HUMAN), initRoll(this->throwDice()) {};
         // Creates a player knowing the board's starting position and the type of the player (human or bot)
-        Player(int p, PlayerType t) : balance(STARTING_BALANCE), id(playersCounter++), position(p), type(t) {};
+        Player(int p, PlayerType t) : balance(STARTING_BALANCE), id(playersCounter++), position(p), type(t), initRoll(this->throwDice()) {};
         
         int getBalance(void) const { return this->balance; };
         int getId(void) const { return this->id; };
         int getPosition(void) const { return this->position; };
+        int getInitRoll(void) const { return this->initRoll; };
+        void newRoll(void); // Simulates a new dice roll and stores the result in initRoll in case some players roll the sama number
         void deposit(int amount);
         void withdraw(int amount);
         void transfer(int amount, const std::shared_ptr<Player>& player); // Transfers an amount of money from the instance player to another player

@@ -2,6 +2,7 @@
 
 #include "monopoly.h"
 #include <fstream>
+#include <algorithm>
 
 std::ofstream logFile;
 
@@ -11,21 +12,19 @@ char monopUtil::nthLetter(int idx)
     return "ABCDEFGHILMNOPQRSTUVZ"[idx];
 }
 
-void monopUtil::gameLoop(Board board) {
-    int max;
-    int firstPlayerIdx = 0;
-
-    // Determine the starting player based on the highest dice roll
-    for (std::shared_ptr<Player> player: board.getPlayers()) {
-        int roll = player->throwDice();
-        if (roll > max) {
-            max = roll;
-            firstPlayerIdx = player->getId();
-        }
+bool monopUtil::compareRolls(const std::shared_ptr<Player>& p1, const std::shared_ptr<Player>& p2) {
+    if(p1->getInitRoll() == p2->getInitRoll()){
+        do{
+            log("Giocatore " + std::to_string(p1->getId()) + " e giocatore " + std::to_string(p2->getId()) + " hanno tirato lo stesso valore, si ripete il tiro");
+            p1->newRoll();
+            p2->newRoll();
+        }while(p1->getInitRoll() == p2->getInitRoll());
     }
+    return p1->getInitRoll() > p2->getInitRoll();
+}
 
-    std::swap(board.players[0], board.players[firstPlayerIdx]); // Swap the first player with the starting player
-
+void monopUtil::gameLoop(Board board) {
+    std::sort(board.players.begin(), board.players.end(), compareRolls); // Sorts the players by their dice roll
     int turn = 0;
     board.print();
     // Main game loop, runs until the game is over or the maximum number of turns is reached
