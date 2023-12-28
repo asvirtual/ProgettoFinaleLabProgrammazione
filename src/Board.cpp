@@ -177,7 +177,6 @@ void Board::payRent(SideTile* tile, const std::shared_ptr<Player>& player) {
             )
         );
 
-        
         return;
     }
 
@@ -191,7 +190,7 @@ void Board::move(const std::shared_ptr<Player>& player) {
     // Check if the player's trajectory passes through the start tile
     for (int i = 1; i <= roll; i++){
         if (this->tiles[(player->position + i) % Board::TILES_COUNT]->getType() == TileType::START) {
-            player->deposit(1);
+            player->deposit(20);
             monopUtil::log("Giocatore " + std::to_string(player->id) + " e' passato dal via e ha ritirato 20 fiorini!");
             break;
         }
