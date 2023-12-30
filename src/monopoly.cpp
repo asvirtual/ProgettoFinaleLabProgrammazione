@@ -12,19 +12,48 @@ char monopUtil::nthLetter(int idx)
     return "ABCDEFGHILMNOPQRSTUVZ"[idx];
 }
 
-bool monopUtil::compareRolls(const std::shared_ptr<Player>& p1, const std::shared_ptr<Player>& p2) {
-    if(p1->getInitRoll() == p2->getInitRoll()){
-        do{
-            log("Giocatore " + std::to_string(p1->getId()) + " e giocatore " + std::to_string(p2->getId()) + " hanno tirato lo stesso valore, si ripete il tiro");
-            p1->newRoll();
-            p2->newRoll();
-        }while(p1->getInitRoll() == p2->getInitRoll());
+void sortPlayers(std::vector<std::shared_ptr<Player>>& players, std::vector<std::shared_ptr<Player>>::iterator begin, std::vector<std::shared_ptr<Player>>::iterator end) {
+    typedef std::pair<Player*, int> playerRollPair;
+    std::vector<playerRollPair> rolls;
+
+    for (auto it = begin; it != end; it++) {
+        std::cout << "Player " << (*it)->getId() << " rolling dice \n";
+        rolls.push_back(playerRollPair(it->get(), (*it)->throwDice()));
     }
-    return p1->getInitRoll() > p2->getInitRoll();
+    
+    std::sort(begin, end, [rolls] (auto p1, auto p2) { 
+        return (
+            std::find_if(rolls.begin(), rolls.end(), [p1] (auto pair) { return *pair.first == *p1; })->second > 
+            std::find_if(rolls.begin(), rolls.end(), [p2] (auto pair) { return *pair.first == *p2; })->second
+        );
+    });
+
+    std::sort(rolls.begin(), rolls.end(), [] (auto p1, auto p2) { return p1.second > p2.second; });
+
+    for (const std::shared_ptr<Player>& player: players)
+        monopUtil::log("Giocatore " + std::to_string(player->getId()));
+    
+    std::cout << "\n";
+    
+    int notSortedPortion = 0;
+    for (int i = 1; i < rolls.size(); i++) {
+        if (rolls[i].second == rolls[i - 1].second) notSortedPortion++;
+        if (notSortedPortion > 0 && (rolls[i].second != rolls[i - 1].second || i == rolls.size() - 1)) {
+            sortPlayers(players, players.begin() + i - notSortedPortion, players.begin() + i);
+            notSortedPortion = 0;
+        }
+    }
 }
 
 void monopUtil::gameLoop(Board board) {
-    std::sort(board.players.begin(), board.players.end(), compareRolls); // Sorts the players by their dice roll
+    std::vector<int> rolls;
+    sortPlayers(board.players, board.players.begin(), board.players.end());
+
+    for (const std::shared_ptr<Player>& player: board.getPlayers())
+        log("Giocatore " + std::to_string(player->getId()));
+
+    return;
+    
     int turn = 0;
     board.print();
     // Main game loop, runs until the game is over or the maximum number of turns is reached
