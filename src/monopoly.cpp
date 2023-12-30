@@ -19,24 +19,37 @@ char monopUtil::nthLetter(int idx)
     the function will recursively call itself to sort the sub-portion of the vector containing the players with the same dice roll.
 */
 void monopUtil::sortPlayers(std::vector<playerRollPair>& rolls, std::vector<playerRollPair>::iterator begin, std::vector<playerRollPair>::iterator end) {
-    // Throw the dice for each player
-    for (auto it = begin; it != end; it++) 
-        it->second = it->first->throwDice();
+    std::cout << "Sorting portion: [ ";
+    for (auto it = begin; it != end; it++) {
+        std::cout << std::to_string(it->first->getId()) << ", ";
+    }
 
+    std::cout << "]\n";
+
+    // Throw the dice for each player
+    for (auto it = begin; it != end; it++) it->second = it->first->throwDice();
+    
     // Sort the players by their dice roll in non-increasing order (if p1 is greater or equal than p2, p1 will be placed before p2)
     std::sort(begin, end, [] (auto p1, auto p2) { return p1.second > p2.second; });
+
+    // Print the temporary player order
+    std::cout << "[ ";
+    for (const playerRollPair& roll: rolls)
+        std::cout << "(" << std::to_string(roll.first->getId()) << ", " << std::to_string(roll.second) << ")" << ", ";
+    
+    std::cout << "]\n";
     
     // Check if there are players with the same dice roll and, if so, keep track of the number of players with the same dice roll
     // and recursively call this function to sort the sub-portions of the vector containing the players with the same dice roll
     int nonSortedPortion = 0;
-    for (auto it = begin; it != end - 1; it++) {
-        if (it->second == (it + 1)->second) nonSortedPortion++; // Keep track of the number of players with the same dice roll
+    for (auto it = begin; it != end; it++) {
+        // Keep track of the number of players with the same dice roll
+        if (it != end - 1 && it->second == (it + 1)->second) nonSortedPortion++; 
 
         // If we found a portion of the vector containing players with the same dice roll and we reached its end (the next player has 
-        // a different dice roll or the iterator points to the second-last element) sort the players in the said portion of the vector
-        if (nonSortedPortion > 0 && (it == end - 2 || it->second != (it + 1)->second)) {
-            if (it == end - 2) sortPlayers(rolls, it - nonSortedPortion + 1, end);
-            else sortPlayers(rolls, it - nonSortedPortion, it + 1);
+        // a different dice roll or the iterator points to the last element) sort the players in the said portion of the vector
+        if (nonSortedPortion > 0 && (it == end - 1 || it->second != (it + 1)->second)) {
+            sortPlayers(rolls, it - nonSortedPortion, it + 1);
             nonSortedPortion = 0;
         }
     }
@@ -63,6 +76,8 @@ void monopUtil::gameLoop(Board board) {
 
     for (const std::shared_ptr<Player>& player: board.getPlayers())
         log("Giocatore " + std::to_string(player->getId()));
+
+    return;
 
     int turn = 0;
     board.print();
