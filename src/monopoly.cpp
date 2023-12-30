@@ -53,12 +53,12 @@ void monopUtil::gameLoop(Board board) {
 
     // Sort the players vector based on the roll vector, by finding the dice roll of each player in the roll vector
     for (auto it = rolls.begin(); it != rolls.end(); it++) {
-        auto toSwapIdx = std::find_if(
+        auto toSwapIt = std::find_if(
             board.players.begin(), board.players.end(),
             [it] (const std::shared_ptr<Player>& p) { return *p == *it->first; }
         );
 
-        std::swap(board.players[it - rolls.begin()], board.players[toSwapIdx - board.players.begin()]);
+        std::swap(board.players[it - rolls.begin()], board.players[toSwapIt - board.players.begin()]);
     }
 
     for (const std::shared_ptr<Player>& player: board.getPlayers())
