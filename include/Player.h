@@ -48,6 +48,7 @@ class Player {
         void transfer(int amount, const std::shared_ptr<Player>& player); // Transfers an amount of money from the instance player to another player
         int throwDice(void); // Simulates the dice roll and returns the result
         bool operator==(const Player& p) const { return this->id == p.id; }; // Overloads the == operator to compare two players by their id
+        bool operator!=(const Player& p) const { return this->id != p.id; }; // Overloads the != operator to compare two players by their id
         std::string toString(void) const { return "Giocatore " + std::to_string(this->id) + " - " + std::to_string(this->balance) + " fiorini"; };
         friend class Board; // Board class needs to access the player's position to move it and ownedTiles to handle the player's elimination
 };
