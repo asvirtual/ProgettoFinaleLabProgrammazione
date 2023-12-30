@@ -161,6 +161,7 @@ void Board::buildHotel(SideTile* tile) {
 void Board::payRent(SideTile* tile, const std::shared_ptr<Player>& player) {
     // If the player doesn't have enough money to pay the rent, he is eliminated
     if (player->balance < tile->getRent()) {
+        monopUtil::log("Giocatore " + std::to_string(player->id) + " e' stato eliminato");
         // The owner gets all the player's money
         tile->owner->deposit(player->balance);
         // The player's owned tiles are freed and their buildings are reset
@@ -176,7 +177,6 @@ void Board::payRent(SideTile* tile, const std::shared_ptr<Player>& player) {
             )
         );
 
-        monopUtil::log("Giocatore " + std::to_string(player->id) + " è stato eliminato");
         return;
     }
 
@@ -190,7 +190,7 @@ void Board::move(const std::shared_ptr<Player>& player) {
     // Check if the player's trajectory passes through the start tile
     for (int i = 1; i <= roll; i++){
         if (this->tiles[(player->position + i) % Board::TILES_COUNT]->getType() == TileType::START) {
-            player->deposit(1);
+            player->deposit(20);
             monopUtil::log("Giocatore " + std::to_string(player->id) + " e' passato dal via e ha ritirato 20 fiorini!");
             break;
         }
