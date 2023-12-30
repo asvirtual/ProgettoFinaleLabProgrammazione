@@ -9,13 +9,13 @@
 #include "monopoly.h"
 
 Board::Board(void) {
-    monopUtil::openLogFile();
+    monopolyUtil::openLogFile();
     this->generateTiles();
     this->generatePlayers();
 }
 
 Board::Board(bool humanPlayer) {
-    monopUtil::openLogFile();
+    monopolyUtil::openLogFile();
     this->humanPlayer = humanPlayer;
     this->generateTiles();
     this->generatePlayers();
@@ -99,7 +99,7 @@ void Board::print(void) {
 
     for (int row = 0; row < Board::SIDE_LENGTH; row++) {
         for (int col = 0; col < Board::SIDE_LENGTH; col++) {
-            if (col == 0) std::cout << " " << monopUtil::nthLetter(row) << "    ";
+            if (col == 0) std::cout << " " << monopolyUtil::nthLetter(row) << "    ";
             if (row == 0 || row == Board::SIDE_LENGTH - 1 || col == 0 || col == Board::SIDE_LENGTH - 1) {
                 // Map the row and column to the tiles' vector index (0..27)
                 int idx = 
@@ -143,25 +143,25 @@ void Board::buyTerrain(SideTile* tile, const std::shared_ptr<Player>& player) {
     player->withdraw(tile->getTerrainPrice());
     player->ownedTiles.push_back(std::make_shared<SideTile>(*tile));
     tile->owner = player;
-    monopUtil::log("Giocatore " + std::to_string(player->id) + " ha acquistato il terreno " + tile->toCoordinates());
+    monopolyUtil::log("Giocatore " + std::to_string(player->id) + " ha acquistato il terreno " + tile->toCoordinates());
 }
 
 void Board::buildHouse(SideTile* tile) {
     tile->owner->withdraw(tile->getHousePrice());
     tile->building = TileBuilding::HOUSE;
-    monopUtil::log("Giocatore " + std::to_string(tile->owner->id) + " ha costruito una casa sul terreno " + tile->toCoordinates()); 
+    monopolyUtil::log("Giocatore " + std::to_string(tile->owner->id) + " ha costruito una casa sul terreno " + tile->toCoordinates()); 
 }
 
 void Board::buildHotel(SideTile* tile) {
     tile->owner->withdraw(tile->getHotelPrice());
     tile->building = TileBuilding::HOTEL;
-    monopUtil::log("Giocatore " + std::to_string(tile->owner->id) + " ha migliorato una casa in albergo sul terreno " + tile->toCoordinates());
+    monopolyUtil::log("Giocatore " + std::to_string(tile->owner->id) + " ha migliorato una casa in albergo sul terreno " + tile->toCoordinates());
 }
 
 void Board::payRent(SideTile* tile, const std::shared_ptr<Player>& player) {
     // If the player doesn't have enough money to pay the rent, he is eliminated
     if (player->balance < tile->getRent()) {
-        monopUtil::log("Giocatore " + std::to_string(player->id) + " e' stato eliminato");
+        monopolyUtil::log("Giocatore " + std::to_string(player->id) + " e' stato eliminato");
         // The owner gets all the player's money
         tile->owner->deposit(player->balance);
         // The player's owned tiles are freed and their buildings are reset
@@ -181,7 +181,7 @@ void Board::payRent(SideTile* tile, const std::shared_ptr<Player>& player) {
     }
 
     player->transfer(tile->getRent(), tile->owner);
-    monopUtil::log("Giocatore " + std::to_string(player->id) + " ha pagato " + std::to_string(tile->getRent()) + " fiorini al giocatore " + std::to_string(tile->owner->id) + " per pernottamento nella casella " + tile->toCoordinates());
+    monopolyUtil::log("Giocatore " + std::to_string(player->id) + " ha pagato " + std::to_string(tile->getRent()) + " fiorini al giocatore " + std::to_string(tile->owner->id) + " per pernottamento nella casella " + tile->toCoordinates());
 }
 
 void Board::move(const std::shared_ptr<Player>& player) {
@@ -191,13 +191,13 @@ void Board::move(const std::shared_ptr<Player>& player) {
     for (int i = 1; i <= roll; i++){
         if (this->tiles[(player->position + i) % Board::TILES_COUNT]->getType() == TileType::START) {
             player->deposit(20);
-            monopUtil::log("Giocatore " + std::to_string(player->id) + " e' passato dal via e ha ritirato 20 fiorini!");
+            monopolyUtil::log("Giocatore " + std::to_string(player->id) + " e' passato dal via e ha ritirato 20 fiorini!");
             break;
         }
     }
 
     player->position = (player->position + roll) % Board::TILES_COUNT;
-    monopUtil::log("Giocatore " + std::to_string(player->id) + " e' arrivato alla casella " + this->tiles[player->position]->toCoordinates());
+    monopolyUtil::log("Giocatore " + std::to_string(player->id) + " e' arrivato alla casella " + this->tiles[player->position]->toCoordinates());
 
     if (this->tiles[player->position]->getType() == TileType::CORNER || this->tiles[player->position]->getType() == TileType::START)
         return;
@@ -262,13 +262,13 @@ void Board::getFinalStandings(void) {
         }
     }
 
-    monopUtil::log(isDraw ? "Pareggio" : ("Giocatore " + std::to_string(players[0]->id) + " ha vinto la partita"));
+    monopolyUtil::log(isDraw ? "Pareggio" : ("Giocatore " + std::to_string(players[0]->id) + " ha vinto la partita"));
     // If there is a draw or the game ended because it reached the maximum number of turns, print the players' rankings
     if (players.size() > 1) {
         int place = 0;
         for (const std::shared_ptr<Player>& p : this->players) {
             if (std::find(winners.begin(), winners.end(), p.get()) == winners.end()) place++;
-            monopUtil::log(std::to_string(place) + ") " + (*p).toString());
+            monopolyUtil::log(std::to_string(place) + ") " + (*p).toString());
         }    
     }
 }

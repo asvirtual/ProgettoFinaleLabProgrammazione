@@ -25,7 +25,7 @@ int main(int argc, char *argv[]) {
     srand(time(0)); // Seed the random number generator once, it will be used by BotPlayer objects
 
     Board b = Board(std::string(argv[1]) == "human");
-    monopUtil::gameLoop(b);
+    monopolyUtil::gameLoop(b);
     
     return 0;
 }

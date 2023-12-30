@@ -19,7 +19,7 @@ int Player::throwDice(void) {
     for (int i = 0; i < 2; i++)
         roll += ((rand() % 6) + 1);
 
-    monopUtil::log("Giocatore " + std::to_string(this->id) + " ha tirato i dadi ottenendo un valore di " + std::to_string(roll));
+    monopolyUtil::log("Giocatore " + std::to_string(this->id) + " ha tirato i dadi ottenendo un valore di " + std::to_string(roll));
     return roll;
 }
 

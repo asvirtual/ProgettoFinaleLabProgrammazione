@@ -6,7 +6,7 @@
 
 std::ofstream logFile;
 
-char monopUtil::nthLetter(int idx)
+char monopolyUtil::nthLetter(int idx)
 {
     if (idx < 0 || idx > 20) return ' ';
     return "ABCDEFGHILMNOPQRSTUVZ"[idx];
@@ -29,13 +29,14 @@ void getTurnOrder(std::vector<playerRollPair>& rolls, std::vector<playerRollPair
     // to sort the sub-portions of the vector containing the players with the same dice roll
     int portionSize = 0;
     for (auto it = begin; it != end; it++) {
+        auto next = it + 1;
         // Keep track of the number of players with the same dice roll
-        if (it != end - 1 && it->second == (it + 1)->second) portionSize++; 
+        if (it != end - 1 && it->second == next->second) portionSize++; 
 
         // If we found a sub-portion of the vector containing players with the same dice roll and we reached its end (the next player has 
         // a different dice roll or the iterator points to the last element) sort the players in the said sub-portion of the vector
-        if (portionSize > 0 && (it == end - 1 || it->second != (it + 1)->second)) {
-            getTurnOrder(rolls, it - portionSize, it + 1);
+        if (portionSize > 0 && (next == end || it->second != next->second)) {
+            getTurnOrder(rolls, it - portionSize, next);
             portionSize = 0;
         }
     }
@@ -44,7 +45,7 @@ void getTurnOrder(std::vector<playerRollPair>& rolls, std::vector<playerRollPair
 /*
     This function sorts the players based on the dice roll at the beginning of the game.
     It uses the getTurnOrder function to sort the initialRolls vector by the players' dice roll 
-    and then it sorts the actual board.players vector
+    and then it copies that order in the actual board.players vector, which is passwed as a parameter.
 */
 void sortPlayers(std::vector<std::shared_ptr<Player>>& players) {
     // Initialize the initialRolls vector, made of pairs of pointers to players and their 
@@ -54,33 +55,23 @@ void sortPlayers(std::vector<std::shared_ptr<Player>>& players) {
 
     getTurnOrder(initialRolls, initialRolls.begin(), initialRolls.end());
 
-    // Sort the players vector based on the order found in initialRolls vector
-    for (auto it = players.begin(); it != players.end(); it++) {
-        // shared_ptr found in the current position of the players vector
-        std::shared_ptr<Player>& current = *it; 
-        // Pointer to the player found in the corresponding position of the initialRolls vector
-        Player* correspondingPlayer = initialRolls[it - players.begin()].first; 
-
-        // If the current player is already in the correct position, skip it
-        if (*current.get() == *correspondingPlayer) continue;
-
-        // Find the correct index for the "current" player, by finding the iterator pointing to the same player in the initialRolls vector
-        auto toSwapIt = std::find_if(
-            initialRolls.begin(), initialRolls.end(), 
-            [it] (const playerRollPair& roll) { return *it->get() == *roll.first; }
-        );
-        int toSwapIdx = toSwapIt - initialRolls.begin();
-
-        // Swap the pointer owned by the current shared_ptr with the pointer owned by the shared_ptr found at toSwapIdx
-        current.swap(players[toSwapIdx]);
-    }
+    // Sort the players vector copying the order found in initialRolls vector
+    std::sort(
+        players.begin(), players.end(), 
+        [initialRolls] (std::shared_ptr<Player>& p1, std::shared_ptr<Player>& p2) {
+            return 
+                // Sort p1 and p2 based on which one comes first (has the lower index) in the initialRolls vector
+                (std::find_if(initialRolls.begin(), initialRolls.end(), [p1] (playerRollPair p) { return *p.first == *p1; }) - initialRolls.begin()) < 
+                (std::find_if(initialRolls.begin(), initialRolls.end(), [p2] (playerRollPair p) { return *p.first == *p2; }) - initialRolls.begin());
+        }
+    );
 }
 
-void monopUtil::gameLoop(Board board) {
+void monopolyUtil::gameLoop(Board board) {
     sortPlayers(board.players);
     log("Ordine di gioco: ");
     for (const std::shared_ptr<Player>& player: board.getPlayers())
-        monopUtil::log("Giocatore " + std::to_string(player->getId()));
+        monopolyUtil::log("Giocatore " + std::to_string(player->getId()));
 
     int turn = 0;
     board.print();
@@ -90,8 +81,8 @@ void monopUtil::gameLoop(Board board) {
         turn++;
         for (const std::shared_ptr<Player>& player: board.getPlayers()) {
             if (player.get() == nullptr) continue; // Skip players that have lost and have been eliminated during this turn
-            board.move(player); 
-            monopUtil::log("Giocatore " + std::to_string(player->getId()) + " ha finito il turno");
+            board.move(player);
+            monopolyUtil::log("Giocatore " + std::to_string(player->getId()) + " ha finito il turno");
         }
     }
 
@@ -99,10 +90,10 @@ void monopUtil::gameLoop(Board board) {
     board.getFinalStandings();
 }
 
-void monopUtil::log(std::string message) {
+void monopolyUtil::log(std::string message) {
     std::cout << message << "\n";
     logFile << message << "\n";
 }
 
-void monopUtil::openLogFile(void) { logFile.open("log.txt"); }
-void monopUtil::closeLogFile(void) { logFile.close(); }
+void monopolyUtil::openLogFile(void) { logFile.open("log.txt"); }
+void monopolyUtil::closeLogFile(void) { logFile.close(); }

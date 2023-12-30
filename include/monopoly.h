@@ -7,14 +7,13 @@
 
 class Board; // Forward declaration
 
-/*
-    monopUtil namespace which contains utility functions for the game.
-*/
-
 // This type will be used to sort the players by their dice roll at the beginning of the game
 typedef std::pair<Player*, int> playerRollPair; 
 
-namespace monopUtil{
+/*
+    The monopolyUtil namespace contains utility functions for the game.
+*/
+namespace monopolyUtil {
     char nthLetter(int idx);
     void gameLoop(Board board); // Main game loop, determines the starting player and runs the game
     void openLogFile(void);

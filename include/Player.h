@@ -10,11 +10,6 @@
 #include <memory>
 #include <iostream>
 
-/*
-    Player class which represents a player of the game.
-    It contains the player's balance, position, id and type (human or bot), and provides
-    some member function to handle the player's balance and simulate the dice roll
-*/
 enum class PlayerType {
     HUMAN,
     BOT
@@ -22,6 +17,11 @@ enum class PlayerType {
 
 class SideTile; // Forward declaration
 
+/*
+    Player class which represents a player of the game.
+    It contains the player's balance, position, id and type (human or bot), and provides
+    some member function to handle the player's balance and simulate the dice roll
+*/
 class Player {
     protected:
         static constexpr int STARTING_BALANCE = 100;
@@ -45,7 +45,7 @@ class Player {
         int getPosition(void) const { return this->position; };
         void deposit(int amount);
         void withdraw(int amount);
-        void transfer(int amount, const std::shared_ptr<Player>& player); // Transfers an amount of money from the instance player to another player
+        void transfer(int amount, const std::shared_ptr<Player>& player); // Transfers an amount of money to another player
         int throwDice(void); // Simulates the dice roll and returns the result
         bool operator==(const Player& p) const { return this->id == p.id; }; // Overloads the == operator to compare two players by their id
         bool operator!=(const Player& p) const { return this->id != p.id; }; // Overloads the != operator to compare two players by their id

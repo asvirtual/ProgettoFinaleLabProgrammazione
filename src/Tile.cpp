@@ -41,19 +41,19 @@ std::string Tile::toCoordinates(void) const {
 
     // Upper row, row is "A", column is array's index + 1 ([0-7] -> [1-8])
     if (this->position <= Board::TILES_COUNT / 4) 
-        coords = monopUtil::nthLetter(0) + std::to_string(this->position + 1);
+        coords = monopolyUtil::nthLetter(0) + std::to_string(this->position + 1);
 
     // Right column, row is array's index + 1 corresponding letter ([8-14] -> [1-7] -> [B-H]), column is 8
     else if (this->position <= Board::TILES_COUNT / 2) 
-        coords = monopUtil::nthLetter(this->position - 7) + std::to_string(8);
+        coords = monopolyUtil::nthLetter(this->position - 7) + std::to_string(8);
 
     // Lower row, row is "H", column is | array's index - (3/4 * tiles count + 1) | ([21-14] -> [1-8])
     else if (this->position <= 3 * Board::TILES_COUNT / 4) 
-        coords = monopUtil::nthLetter(7) + std::to_string(abs(this->position - (3 * Board::TILES_COUNT / 4 + 1)));
+        coords = monopolyUtil::nthLetter(7) + std::to_string(abs(this->position - (3 * Board::TILES_COUNT / 4 + 1)));
 
     // Left column, row is | array's index - tiles count | corresponding letter ([27-22] -> [2-7] -> [B-G]), column is 1
     else 
-        coords = monopUtil::nthLetter(abs(this->position - Board::TILES_COUNT)) + std::to_string(1);
+        coords = monopolyUtil::nthLetter(abs(this->position - Board::TILES_COUNT)) + std::to_string(1);
 
     return coords;
 }
