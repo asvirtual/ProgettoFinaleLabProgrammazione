@@ -188,7 +188,7 @@ void Board::move(const std::shared_ptr<Player>& player) {
     int roll = player->throwDice();
 
     // Check if the player's trajectory passes through the start tile
-    for (int i = 1; i <= roll; i++){
+    for (int i = 1; i <= roll; i++) {
         if (this->tiles[(player->position + i) % Board::TILES_COUNT]->getType() == TileType::START) {
             player->deposit(20);
             monopolyUtil::log("Giocatore " + std::to_string(player->id) + " e' passato dal via e ha ritirato 20 fiorini!");
@@ -249,7 +249,7 @@ void Board::getFinalStandings(void) {
     std::vector<Player*> winners;
     std::sort(
         players.begin(), players.end(), 
-        [] (const std::shared_ptr<Player> p1, const std::shared_ptr<Player> p2) { return p1->getBalance() > p2->getBalance(); }
+        [] (std::shared_ptr<Player>& p1, std::shared_ptr<Player>& p2) { return p1->getBalance() > p2->getBalance(); }
     );
 
     // Check if there is a draw
@@ -268,7 +268,7 @@ void Board::getFinalStandings(void) {
         int place = 0;
         for (const std::shared_ptr<Player>& p : this->players) {
             if (std::find(winners.begin(), winners.end(), p.get()) == winners.end()) place++;
-            monopolyUtil::log(std::to_string(place) + ") " + (*p).toString());
+            monopolyUtil::log(std::to_string(place) + ") " + p->toString());
         }    
     }
 }
